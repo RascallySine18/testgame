@@ -3,353 +3,510 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Brainrot Master Test (266 Items)</title>
+    <title>Brainrot Ultimate Quiz</title>
     <style>
         :root {
-            --glass: rgba(255, 255, 255, 0.2);
-            --border: rgba(255, 255, 255, 0.3);
-            --accent: #00d2ff;
+            --glass-bg: rgba(255, 255, 255, 0.25);
+            --glass-border: rgba(255, 255, 255, 0.4);
+            --text-color: #1d1d1f;
+            --accent: #007aff;
+            --ios-blur: blur(25px);
         }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", sans-serif; }
+
         body {
-            margin: 0; min-height: 100vh;
-            background: linear-gradient(45deg, #0f0c29, #302b63, #24243e);
-            display: flex; justify-content: center; align-items: center;
-            font-family: 'Segoe UI', sans-serif; color: white;
+            background: linear-gradient(160deg, #e0c3fc 0%, #8ec5fc 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 15px;
+            color: var(--text-color);
+            -webkit-font-smoothing: antialiased;
         }
-        .container {
-            background: var(--glass);
-            backdrop-filter: blur(20px);
-            border: 1px solid var(--border);
-            border-radius: 25px;
-            padding: 30px; width: 90%; max-width: 500px;
-            text-align: center; box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: var(--ios-blur);
+            -webkit-backdrop-filter: var(--ios-blur);
+            border: 1px solid var(--glass-border);
+            border-radius: 35px;
+            width: 100%;
+            max-width: 550px;
+            padding: 30px;
+            box-shadow: 0 15px 45px rgba(0,0,0,0.1);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
         }
-        .q-img { width: 100%; height: 250px; object-fit: contain; border-radius: 15px; background: rgba(0,0,0,0.2); margin-bottom: 20px; }
-        .options { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        .btn {
-            background: rgba(255,255,255,0.1); border: 1px solid var(--border);
-            padding: 12px; border-radius: 12px; color: white; cursor: pointer;
-            transition: 0.3s; font-size: 14px;
+
+        h1 { font-weight: 700; margin-bottom: 25px; font-size: 26px; letter-spacing: -0.8px; }
+
+        /* Прогресс-бары */
+        .progress-container { width: 100%; height: 6px; background: rgba(0,0,0,0.08); border-radius: 10px; margin: 12px 0; overflow: hidden; }
+        .progress-fill { height: 100%; background: var(--accent); width: 0%; transition: width 0.4s cubic-bezier(0.25, 0.1, 0.25, 1); }
+        .timer-bar { background: #ff3b30; transition: width 0.1s linear; }
+
+        .stats-info { font-size: 14px; font-weight: 500; opacity: 0.8; margin-bottom: 4px; display: flex; justify-content: space-between; }
+
+        /* Картинка вопроса */
+        .q-box {
+            width: 100%;
+            height: 240px;
+            border-radius: 22px;
+            background: rgba(255,255,255,0.3);
+            margin: 15px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid var(--glass-border);
+            box-shadow: inset 0 0 15px rgba(255,255,255,0.5);
         }
-        .btn:hover { background: var(--accent); transform: scale(1.02); }
-        .progress { height: 6px; background: rgba(255,255,255,0.1); border-radius: 3px; margin: 15px 0; overflow: hidden; }
-        .progress-fill { height: 100%; background: var(--accent); width: 0%; transition: 0.3s; }
+        .q-box img { max-width: 90%; max-height: 90%; object-fit: contain; border-radius: 10px; }
+
+        /* Сетка ответов (6 вариантов) */
+        .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 15px; }
+        @media (max-width: 480px) { .options-grid { grid-template-columns: 1fr; } }
+
+        .opt-btn {
+            background: rgba(255, 255, 255, 0.4);
+            border: 1px solid var(--glass-border);
+            padding: 16px;
+            border-radius: 18px;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: 600;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            color: var(--text-color);
+        }
+        .opt-btn:hover { background: rgba(255, 255, 255, 0.7); transform: scale(1.02); }
+        .opt-btn:active { transform: scale(0.98); }
+
+        /* Навигация */
+        .menu-stack { display: flex; flex-direction: column; gap: 12px; }
+        .nav-btn {
+            padding: 20px;
+            border-radius: 20px;
+            border: none;
+            background: var(--accent);
+            color: white;
+            font-weight: 700;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .secondary-btn { background: rgba(255,255,255,0.5); color: var(--text-color); }
         .hidden { display: none; }
-        select, .start-btn { width: 100%; padding: 15px; border-radius: 15px; border: none; margin-top: 10px; cursor: pointer; }
-        .start-btn { background: var(--accent); color: white; font-weight: bold; font-size: 18px; }
+        
+        .stats-list { display: grid; grid-template-columns: 1fr; gap: 8px; max-height: 300px; overflow-y: auto; text-align: left; }
+        .stat-card { background: rgba(255,255,255,0.3); padding: 12px; border-radius: 15px; font-size: 14px; }
     </style>
 </head>
 <body>
 
-<div id="menu" class="container">
-    <h1>Brainrot Quiz</h1>
-    <p>Всего в базе: 266 персонажей</p>
-    <select id="category">
-        <option value="all">ВСЕ ПЕРСОНАЖИ (266)</option>
-        <option value="secret">Secret (60+)</option>
-        <option value="divine">Divine (50)</option>
-        <option value="mythical">Mythical (28)</option>
-        <option value="legendary">Legendary (20)</option>
-    </select>
-    <select id="difficulty">
-        <option value="5000">Легко (5 сек)</option>
-        <option value="3000">Средне (3 сек)</option>
-        <option value="2000">Хардкор (2 сек)</option>
-    </select>
-    <button class="start-btn" onclick="start()">ПОГНАЛИ!</button>
-</div>
+<div class="glass-card">
+    <div id="m-type">
+        <h1>Тип теста</h1>
+        <div class="menu-stack">
+            <button class="nav-btn secondary-btn" onclick="selType('so')">Секретные + Эксклюзивные + OG</button>
+            <button class="nav-btn secondary-btn" onclick="selType('divine')">Божественные</button>
+            <button class="nav-btn secondary-btn" onclick="selType('ml')">Мифические + Легендарные</button>
+            <button class="nav-btn secondary-btn" onclick="selType('ero')">Эпические + Редкие + Обычные</button>
+            <button class="nav-btn" onclick="selType('all')">Общий тест (Все 266)</button>
+            <button class="nav-btn secondary-btn" onclick="showStats()">Статистика</button>
+        </div>
+    </div>
 
-<div id="quiz" class="container hidden">
-    <div id="counter">Вопрос 1 / 266</div>
-    <div class="progress"><div id="bar" class="progress-fill"></div></div>
-    <img id="image" class="q-img" src="" alt="loading...">
-    <div id="options" class="options"></div>
-</div>
+    <div id="m-diff" class="hidden">
+        <h1>Сложность</h1>
+        <div class="menu-stack">
+            <button class="nav-btn secondary-btn" onclick="start('easy')">Легкий (5 сек)</button>
+            <button class="nav-btn secondary-btn" onclick="start('medium')">Средний (4 сек)</button>
+            <button class="nav-btn secondary-btn" onclick="start('hard')">Сложный (3 сек)</button>
+            <button class="nav-btn secondary-btn" onclick="goBack()">Назад</button>
+        </div>
+    </div>
 
-<div id="results" class="container hidden">
-    <h2 id="grade">Оценка: 5</h2>
-    <p id="stats-text"></p>
-    <button class="start-btn" onclick="location.reload()">ЗАНОВО</button>
+    <div id="m-quiz" class="hidden">
+        <div class="stats-info"><span id="t-text">Время</span><span id="p-text">1/10</span></div>
+        <div class="progress-container"><div id="t-fill" class="progress-fill timer-bar"></div></div>
+        <div class="progress-container"><div id="p-fill" class="progress-fill"></div></div>
+        <div class="q-box"><img src="" id="q-img"></div>
+        <div class="options-grid" id="opts"></div>
+    </div>
+
+    <div id="m-res" class="hidden">
+        <h1 id="r-grade">Оценка: 5</h1>
+        <p id="r-info" style="margin-bottom: 20px;"></p>
+        <button class="nav-btn" onclick="goBack()" style="width: 100%;">В меню</button>
+    </div>
+
+    <div id="m-stats" class="hidden">
+        <h1>Статистика</h1>
+        <div id="st-list" class="stats-list"></div>
+        <button class="nav-btn secondary-btn" onclick="goBack()" style="width: 100%; margin-top: 20px;">Назад</button>
+    </div>
 </div>
 
 <script>
-// ПОЛНАЯ БАЗА ИЗ ТВОЕГО ФАЙЛА
-const DATA = {
-    secret: [
-        {n: "Ла Вакка Сатурно Сатурнита", i: "https://wotpack.ru/wp-content/uploads/2025/08/la_vacca_saturno_saturnita_29-e1755293025817.webp"},
-        {n: "Лос Маттеос", i: "https://wotpack.ru/wp-content/uploads/2025/08/losmatteos-e1756661413375.webp"},
-        {n: "Бизонте Гуипитере", i: "https://wotpack.ru/wp-content/uploads/2025/09/bisonte_giuppitere_normal-e1757521116356.webp"},
-        {n: "Тренострузо Турбо 4000", i: "https://wotpack.ru/wp-content/uploads/2025/09/trenostruzzo4000-e1757521184798.webp"},
-        {n: "Джакорилла", i: "https://wotpack.ru/wp-content/uploads/2025/10/jackorilla.png"},
-        {n: "Тортугини Драгонфрутини", i: "https://wotpack.ru/wp-content/uploads/2025/08/torrtuginni_dragonfrutini_steal_a_brainrot-e1755293459959.webp"},
-        {n: "Дул Дул Дул", i: "https://wotpack.ru/wp-content/uploads/2025/08/dul_dul_dul-e1756665978961.webp"},
-        {n: "Чачечи", i: "https://wotpack.ru/wp-content/uploads/2025/09/chachechitransparent-e1757957803137.webp"},
-        {n: "Агарини ла Палини", i: "https://wotpack.ru/wp-content/uploads/2025/08/agarrini_la_palini-e1755293603109.webp"},
-        {n: "Лос Спайдеринис", i: "https://wotpack.ru/wp-content/uploads/2025/08/los_spyderinis.webp"},
-        {n: "Экстинкт Тралалеро", i: "https://wotpack.ru/wp-content/uploads/2025/09/jaws.webp"},
-        {n: "Фрагола Ла Ла Ла", i: "https://wotpack.ru/wp-content/uploads/2025/09/sammy_the_strawberry-e1757521259975.webp"},
-        {n: "Лос Тралалеритос", i: "https://wotpack.ru/wp-content/uploads/2025/08/los-tralaleritos-1-e1755293130756.webp"},
-        {n: "Лос Тортус", i: "https://wotpack.ru/wp-content/uploads/2025/10/los-tortus.png"},
-        {n: "Зомби Тралала", i: "https://wotpack.ru/wp-content/uploads/2025/11/zombie-tralala.png"},
-        {n: "Боатито Ауратито", i: "https://wotpack.ru/wp-content/uploads/2025/10/boatito-auratito.png"},
-        {n: "Гуериро Диджитале", i: "https://wotpack.ru/wp-content/uploads/2025/09/guerriro-digitale.png"},
-        {n: "Да мой экзамен", i: "https://wotpack.ru/wp-content/uploads/2025/09/yess-my-examine.png"},
-        {n: "Ла Каркеркар Комбинасион", i: "https://wotpack.ru/wp-content/uploads/2025/09/holy_falloff-e1757521338947.webp"},
-        {n: "Экстинкт Маттео", i: "https://wotpack.ru/wp-content/uploads/2025/09/man_im_dead-e1757958614235.webp"},
-        {n: "Пампкини Спайдерини", i: "https://wotpack.ru/wp-content/uploads/2025/10/pumpkini-spyderini.png"},
-        {n: "Лас Тралалеритас", i: "https://wotpack.ru/wp-content/uploads/2025/08/las-tralaleritas-e1755293190861.webp"},
-        {n: "Джоб Сахур", i: "https://wotpack.ru/wp-content/uploads/2025/08/job-e1756662798685.webp"},
-        {n: "Лас Вакитас Сатурнитас", i: "https://wotpack.ru/wp-content/uploads/2025/08/las_vaquitas_saturnitas_steal_a_brainrot-e1755293525478.webp"},
-        {n: "Лос Каркеритос", i: "https://wotpack.ru/wp-content/uploads/2025/11/los-karkeritos-1.png"},
-        {n: "Триколино", i: "https://wotpack.ru/wp-content/uploads/2025/10/trickolino.png"},
-        {n: "Грайпусени Медузини", i: "https://wotpack.ru/wp-content/uploads/2025/08/graipusseni_medussini_steal_a_brainrot-e1755293304918.webp"},
-        {n: "1x1x1x1", i: "https://wotpack.ru/wp-content/uploads/2025/11/1x1x1x1.png"},
-        {n: "Лос Кукарачас", i: "https://wotpack.ru/wp-content/uploads/2025/11/los-cucarachas.png"},
-        {n: "Куадрамат и Пакрахматмамат", i: "https://wotpack.ru/wp-content/uploads/2025/11/cuadramat-and-pakrahmatmamat.png"},
-        {n: "Лос Джобситос", i: "https://wotpack.ru/wp-content/uploads/2025/11/los-jobcitos.png"},
-        {n: "Тун Тун Тун Сахур", i: "https://wotpack.ru/wp-content/uploads/2025/08/tung_tung_tung_sahur-e1755297846897.webp"},
-        {n: "Нет мой экзамен", i: "https://wotpack.ru/wp-content/uploads/2025/09/noo-my-examine.png"},
-        {n: "Телеморте", i: "https://wotpack.ru/wp-content/uploads/2025/10/telemorte.png"},
-        {n: "Ла Сахур Комбинасион", i: "https://wotpack.ru/wp-content/uploads/2025/09/sahuria-e1757521298723.webp"},
-        {n: "Ту ту ту Сахур", i: "https://wotpack.ru/wp-content/uploads/2025/09/to-to-to-sahur.png"},
-        {n: "Пот Хотспот", i: "https://wotpack.ru/wp-content/uploads/2025/08/pot_hotspot_steal_a_brainrot-e1755293497315.webp"},
-        {n: "Пирулитоита Бисиклетейра", i: "https://wotpack.ru/wp-content/uploads/2025/11/pirulitoita-bicicleteira.png"},
-        {n: "Хорегини Бум", i: "https://wotpack.ru/wp-content/uploads/2025/10/horegini-boom.png"},
-        {n: "Чиклетейра Бисиклетейра", i: "https://wotpack.ru/wp-content/uploads/2025/08/chicleteira-bicicleteira.webp"},
-        {n: "Чиклетейрина Бисиклетейрина", i: "https://wotpack.ru/wp-content/uploads/2025/10/chicleteirina-bicicleteirina.png"},
-        {n: "Лос Кесадильяс", i: "https://wotpack.ru/wp-content/uploads/2025/11/los-quesadillas.png"},
-        {n: "Бурито Бандито", i: "https://wotpack.ru/wp-content/uploads/2025/10/burrito-bandito.png"},
-        {n: "Гость 666", i: "https://wotpack.ru/wp-content/uploads/2025/11/guest-666.png"},
-        {n: "Ранг Ринг Бас", i: "https://wotpack.ru/wp-content/uploads/2025/10/rang-ring-bus.png"},
-        {n: "Лос Буритос", i: "https://wotpack.ru/wp-content/uploads/2025/11/los-burritos.png"},
-        {n: "Лос Чиклетейрас", i: "https://wotpack.ru/wp-content/uploads/2025/09/los_shitheaditos-e1757958701997.webp"},
-        {n: "Брейнрот 67", i: "https://wotpack.ru/wp-content/uploads/2025/09/breynrot-67.png"},
-        {n: "Ла Гранде Комбинасион", i: "https://wotpack.ru/wp-content/uploads/2025/08/la_grande_combinasion_steal_a_brainrot-e1755293353133.webp"},
-        {n: "Сваэг Сода", i: "https://wotpack.ru/wp-content/uploads/2025/11/swag-soda.png"},
-        {n: "Нуклеаро Динозауро", i: "https://wotpack.ru/wp-content/uploads/2025/08/nuclearo_dinossauro_steal_a_brainrot-e1755293383535.webp"},
-        {n: "Лос Комбинасионас", i: "https://wotpack.ru/wp-content/uploads/2025/08/los_combinasionas_29-e1755293632368.webp"},
-        {n: "Фишино Кловнино", i: "https://wotpack.ru/wp-content/uploads/2025/11/fishino-clownino.png"},
-        {n: "Лас Сис", i: "https://wotpack.ru/wp-content/uploads/2025/09/las-sis.png"},
-        {n: "Лос Планитос", i: "https://wotpack.ru/wp-content/uploads/2025/11/los-planitos.png"},
-        {n: "Лос Спуки Комбинасьонас", i: "https://wotpack.ru/wp-content/uploads/2025/10/los-spooky-combinasionas.png"},
-        {n: "Лос Хотспотситос", i: "https://wotpack.ru/wp-content/uploads/2025/08/los_hotspotsitos2-e1755293676477.webp"},
-        {n: "Мани Мани Пагги", i: "https://wotpack.ru/wp-content/uploads/2025/09/money-money-puggy.png"},
-        {n: "Лос Сиксевен", i: "https://wotpack.ru/wp-content/uploads/2025/10/los-67.png"},
-        {n: "Селуларчини Вициозини", i: "https://wotpack.ru/wp-content/uploads/2025/09/celularcini-viciosini.png"},
-        {n: "25", i: "https://wotpack.ru/wp-content/uploads/2025/12/breynrot-25.png"},
-        {n: "Миететейра Чиклетейра", i: "https://wotpack.ru/wp-content/uploads/2025/10/mieteteira-chicleteira.png"},
-        {n: "Тралаледон", i: "https://wotpack.ru/wp-content/uploads/2025/09/brr_brr_patapem-e1757521387724.webp"},
-        {n: "Лос Паггис", i: "https://wotpack.ru/wp-content/uploads/2025/11/los-puggies.png"},
-        {n: "Есок Секолах", i: "https://wotpack.ru/wp-content/uploads/2025/08/esok_sekolah-e1755293760773.webp"},
-        {n: "Лос Примос", i: "https://wotpack.ru/wp-content/uploads/2025/09/los-primos.png"},
-        {n: "Лос Такоритас", i: "https://wotpack.ru/wp-content/uploads/2025/09/los-tacoritas.png"},
-        {n: "Кетупат Кепат", i: "https://wotpack.ru/wp-content/uploads/2025/08/ketupatkepat-e1756662458289.webp"},
-        {n: "Лос Брос", i: "https://wotpack.ru/wp-content/uploads/2025/09/broooooooo-e1757521421409.webp"},
-        {n: "Тиктак Сахур", i: "https://wotpack.ru/wp-content/uploads/2025/09/tictac-sahur.png"},
-        {n: "Оркаледон", i: "https://wotpack.ru/wp-content/uploads/2025/11/orcaledon-1.png"},
-        {n: "Ла Суприм Комбинасион", i: "https://wotpack.ru/wp-content/uploads/2025/08/supremecombinasion-e1756661029946.webp"},
-        {n: "Кетчуру и Мастуру", i: "https://wotpack.ru/wp-content/uploads/2025/09/ketchuru-e1757521475775.webp"},
-        {n: "Лавадорито Спинито", i: "https://wotpack.ru/wp-content/uploads/2025/11/lavadorito-spinito.png"},
-        {n: "Гарама и Мадундунг", i: "https://wotpack.ru/wp-content/uploads/2025/08/garama_and_mandundung_steal_a_brainrot-e1755293417807.webp"},
-        {n: "Спагетти Туалетти", i: "https://wotpack.ru/wp-content/uploads/2025/08/9ff4f5c6-6ad8-41a3-8e19-ffd9261102bc-removebg-preview-e1756660891710.webp"},
-        {n: "Лос Спагеттис", i: "https://wotpack.ru/wp-content/uploads/2025/11/los-spaghettis.png"},
-        {n: "Фраграма и Чокрама", i: "https://wotpack.ru/wp-content/uploads/2025/11/fragrama-and-chocrama.png"},
-        {n: "Ла Каса Бу", i: "https://wotpack.ru/wp-content/uploads/2025/10/la-casa-boo.png"},
-        {n: "Ла Сикрет Комбинасьен", i: "https://wotpack.ru/wp-content/uploads/2025/10/la-secret-combinasion.png"},
-        {n: "Капитано Моби", i: "https://wotpack.ru/wp-content/uploads/2025/11/capitano-moby.png"},
-        {n: "Бургуро и Фруюро", i: "https://wotpack.ru/wp-content/uploads/2025/10/burguro-and-fryuro.png"},
-        {n: "Куки и Милки", i: "https://wotpack.ru/wp-content/uploads/2025/12/cooki-and-milki.png"},
-        {n: "Всадник без головы", i: "https://wotpack.ru/wp-content/uploads/2025/10/headless-horseman.png"},
-        {n: "Драгон Канелони", i: "https://wotpack.ru/wp-content/uploads/2025/08/dragon_cannelloni-1-e1755293731680.webp"}
-    ],
-    divine: [
-        {n: "Кокофанто Элефанто", i: "https://wotpack.ru/wp-content/uploads/2025/08/cocofanto_elefanto_steal_a_brainrot-e1755293928227.webp"},
-        {n: "Антонио", i: "https://wotpack.ru/wp-content/uploads/2025/09/antonio.png"},
-        {n: "Жирафа Селестре", i: "https://wotpack.ru/wp-content/uploads/2025/08/girafa_celestre_steal_a_brainrot-e1755293973147.webp"},
-        {n: "Гататино Неонино", i: "https://wotpack.ru/wp-content/uploads/2025/08/gattatino_neonino_steal_a_brainrot-e1755294061788.webp"},
-        {n: "Маттео", i: "https://wotpack.ru/wp-content/uploads/2025/08/matteo_steal_a_brainrot-e1755294109367.webp"},
-        {n: "Тралалеро Тралала", i: "https://wotpack.ru/wp-content/uploads/2025/08/tralalero_tralala_steal_a_brainrot-e1755294158390.webp"},
-        {n: "Лос Крокодилитос", i: "https://wotpack.ru/wp-content/uploads/2025/08/los_crocodillitos-2-e1755294183457.webp"},
-        {n: "Тигролигре Фрутонни", i: "https://wotpack.ru/wp-content/uploads/2025/08/tigroligre-frutonni-e1755294986146.webp"},
-        {n: "Мани Мани Мен", i: "https://wotpack.ru/wp-content/uploads/2025/11/money-money-man.png"},
-        {n: "Эспрессо Синьора", i: "https://wotpack.ru/wp-content/uploads/2025/08/espresso_signora_steal_a_brainrot-e1755294215344.webp"},
-        {n: "Один Дин Дин Дун", i: "https://wotpack.ru/wp-content/uploads/2025/08/odin_din_din_dun_steal_a_brainrot-e1755294244201.webp"},
-        {n: "Statutino Libertino", i: "https://wotpack.ru/wp-content/uploads/2025/08/statutino_libertino_steal_a_brainrot-e1755294292537.webp"},
-        {n: "Туканно Бананно", i: "https://wotpack.ru/wp-content/uploads/2025/08/tukanno_bananno-e1755294371377.webp"},
-        {n: "Оркалеро Оркала", i: "https://wotpack.ru/wp-content/uploads/2025/08/orcalero_orcala_steal_a_brainrot-e1755295015126.webp"},
-        {n: "Тралалита Тралала", i: "https://wotpack.ru/wp-content/uploads/2025/09/tralalita-e1757522015418.webp"},
-        {n: "Экстинкт Балерина", i: "https://wotpack.ru/wp-content/uploads/2025/09/dead_art_form-e1757958789465.webp"},
-        {n: "Тренострузо Турбо 3000", i: "https://wotpack.ru/wp-content/uploads/2025/08/trenostruzzo_turbo_3000_steal_a_brainrot-e1755294407899.webp"},
-        {n: "Лос Чихуанинис", i: "https://wotpack.ru/wp-content/uploads/2025/11/los-chihuaninis.png"},
-        {n: "Трипи Тропи Тропи Трипа", i: "https://wotpack.ru/wp-content/uploads/2025/08/trippi_troppi_troppa_trippa-e1755294439392.webp"},
-        {n: "Лас Капучинас", i: "https://wotpack.ru/wp-content/uploads/2025/09/lascapuchinas-e1757522091518.webp"},
-        {n: "Балерини Лололо", i: "https://wotpack.ru/wp-content/uploads/2025/08/ballerino_lololo_steal_a_brainrot-e1755294485304.webp"},
-        {n: "Булбито Бандито Тракторито", i: "https://wotpack.ru/wp-content/uploads/2025/08/bulbito_bandito_traktorito.webp"},
-        {n: "Лос Тунтунтунгситос", i: "https://wotpack.ru/wp-content/uploads/2025/08/los_tungtungtungcitos-e1755294720476.webp"},
-        {n: "Пакрахматмамат", i: "https://wotpack.ru/wp-content/uploads/2025/08/pencil-e1756662960636.webp"},
-        {n: "Лос Бомбинитос", i: "https://wotpack.ru/wp-content/uploads/2025/09/los-bombinitos.png"},
-        {n: "Пиционе Мачина", i: "https://wotpack.ru/wp-content/uploads/2025/08/piccione_macchina_steal_a_brainrot-e1755294786161.webp"},
-        {n: "Бомбардини Тортини", i: "https://wotpack.ru/wp-content/uploads/2025/08/bombardini_tortinii-e1755294834533.webp"},
-        {n: "Пакрахматматина", i: "https://wotpack.ru/wp-content/uploads/2025/10/pakrahmatmatina.png"},
-        {n: "Тракторо Динозауро", i: "https://wotpack.ru/wp-content/uploads/2025/09/tractoro-dinosauro.png"},
-        {n: "Краббо Лимонетта", i: "https://wotpack.ru/wp-content/uploads/2025/09/crabbo-limonetta.png"},
-        {n: "Лос Оркалитос", i: "https://wotpack.ru/wp-content/uploads/2025/08/los_orcalitos-e1755294950333.webp"},
-        {n: "Оркалита Оркала", i: "https://wotpack.ru/wp-content/uploads/2025/09/img_2496-e1757522142572.webp"},
-        {n: "Какасито Саталито", i: "https://wotpack.ru/wp-content/uploads/2025/09/lebron_james-e1757522175873.webp"},
-        {n: "Акванавт", i: "https://wotpack.ru/wp-content/uploads/2025/11/aquanaut.png"},
-        {n: "Бр ес Те Патипум", i: "https://wotpack.ru/wp-content/uploads/2025/08/brr_es_teh_patipum-e1756663033257.webp"},
-        {n: "Корн Корн Корн Сахур", i: "https://wotpack.ru/wp-content/uploads/2025/12/corn-corn-corn-sahur.png"},
-        {n: "Татаруга Цистерна", i: "https://wotpack.ru/wp-content/uploads/2025/08/tartaruga_cisternaaaa-e1756663111257.webp"},
-        {n: "Скваланана", i: "https://wotpack.ru/wp-content/uploads/2025/10/squalanana.png"},
-        {n: "Дуг дуг дуг", i: "https://wotpack.ru/wp-content/uploads/2025/09/dug-dug-dug.png"},
-        {n: "Мумми Амбалабу", i: "https://wotpack.ru/wp-content/uploads/2025/10/mummy-ambalabu.png"},
-        {n: "Гранчиэлло Спирител", i: "https://wotpack.ru/wp-content/uploads/2025/11/granchiello-spiritell.png"},
-        {n: "Но Ла Полиция", i: "https://wotpack.ru/wp-content/uploads/2025/11/noo-la-polizia.png"},
-        {n: "Фрио Ниндзя", i: "https://wotpack.ru/wp-content/uploads/2025/11/frio-ninja.png"},
-        {n: "Пиционетта Машина", i: "https://wotpack.ru/wp-content/uploads/2025/09/that_one_pink_bird_from_angry_birds-e1757522213217.webp"},
-        {n: "Лос Гаттитос", i: "https://wotpack.ru/wp-content/uploads/2025/11/los-gattitos.png"},
-        {n: "Мастодонтико Телепьедоне", i: "https://wotpack.ru/wp-content/uploads/2025/09/clanker-e1757522245551.webp"},
-        {n: "Бамбу Бамбу Сахур", i: "https://wotpack.ru/wp-content/uploads/2025/10/bambu-bambu-sahur.png"},
-        {n: "Капучино Клоунино", i: "https://wotpack.ru/wp-content/uploads/2025/10/cappuccino-clownino.png"},
-        {n: "Анпали Бабель", i: "https://wotpack.ru/wp-content/uploads/2025/09/the_rock-e1757522280970.webp"},
-        {n: "Белуга", i: "https://wotpack.ru/wp-content/uploads/2025/09/beluga-e1757958840115.webp"},
-        {n: "Крупук Паги Паги", i: "https://wotpack.ru/wp-content/uploads/2025/10/krupuk-pagi-pagi.png"},
-        {n: "Поп Поп Сахур", i: "https://wotpack.ru/wp-content/uploads/2025/10/pop-pop-sahur.png"}
-    ],
-    mythical: [
-        {n: "Фриго Камело", i: "https://wotpack.ru/wp-content/uploads/2025/08/frigocamelo.webp"},
-        {n: "Орангутини Ананасини", i: "https://wotpack.ru/wp-content/uploads/2025/08/orangutini-ananassini-1-e1755295250608.webp"},
-        {n: "Рино Тостерино", i: "https://wotpack.ru/wp-content/uploads/2025/08/untitled210_20250808180116-e1755295282108.webp"},
-        {n: "Бомбардиро Крокодило", i: "https://wotpack.ru/wp-content/uploads/2025/08/bombardiro_crocodilo_29-e1755295317935.webp"},
-        {n: "Бруто Гиалуто", i: "https://wotpack.ru/wp-content/uploads/2025/09/bruto_gialutto-e1757522347906.webp"},
-        {n: "Шпиониро Голубиро", i: "https://wotpack.ru/wp-content/uploads/2025/08/spioniro_golubiro_29-e1755295636758.webp"},
-        {n: "Бомбомбини Гусини", i: "https://wotpack.ru/wp-content/uploads/2025/08/bombombini_gusini_steal_a_brainrot-e1755295350349.webp"},
-        {n: "Зибра Зубра Зибралини", i: "https://wotpack.ru/wp-content/uploads/2025/08/zibra_zubra_zibralini-e1755295667262.webp"},
-        {n: "Тигрилини Вотермелини", i: "https://wotpack.ru/wp-content/uploads/2025/08/tigrilini_watermelini-e1755295698448.webp"},
-        {n: "Авокадорила", i: "https://wotpack.ru/wp-content/uploads/2025/08/avocadorilla-e1755295390504.webp"},
-        {n: "Кавало Виртуозо", i: "https://wotpack.ru/wp-content/uploads/2025/08/cavallo_virtuoso-e1755295420654.webp"},
-        {n: "Горило Сабвуфиро", i: "https://wotpack.ru/wp-content/uploads/2025/09/dubstep_boy-e1757522386890.webp"},
-        {n: "Горило Вотермелондрило", i: "https://wotpack.ru/wp-content/uploads/2025/08/gorillo-watermelondrillo-e1755295466811.webp"},
-        {n: "Стоппо Люминино", i: "https://wotpack.ru/wp-content/uploads/2025/11/stoppo-luminino.png"},
-        {n: "Топ Тоби Тоби", i: "https://wotpack.ru/wp-content/uploads/2025/08/tob_tobi_tobi-e1755295498362.webp"},
-        {n: "Лерулерулеруле", i: "https://wotpack.ru/wp-content/uploads/2025/08/lerulerulerule_stealy-e1756663829124.webp"},
-        {n: "Ганганзели Трулала", i: "https://wotpack.ru/wp-content/uploads/2025/08/ganganzelli_trulala-e1755295529336.webp"},
-        {n: "Те Те Те Сахур", i: "https://wotpack.ru/wp-content/uploads/2025/08/te_te_te_sahur-e1755295554584.webp"},
-        {n: "Рино Хеликоптерино", i: "https://wotpack.ru/wp-content/uploads/2025/09/rhino-helicopterino.png"},
-        {n: "Тракодукотулу Делапеладуструз", i: "https://wotpack.ru/wp-content/uploads/2025/08/tracoducotulu_delapeladustuz-e1756663568280.webp"},
-        {n: "Лос Нубинис", i: "https://wotpack.ru/wp-content/uploads/2025/09/noobinis-e1757522428651.webp"},
-        {n: "Качорито Мелонито", i: "https://wotpack.ru/wp-content/uploads/2025/10/cachorrito-melonito.png"},
-        {n: "Карлу", i: "https://wotpack.ru/wp-content/uploads/2025/08/carlooooo-e1756663714951.webp"},
-        {n: "Элефанто Фриго", i: "https://wotpack.ru/wp-content/uploads/2025/09/elefanto-frigo.png"},
-        {n: "Карротини Брейнини", i: "https://wotpack.ru/wp-content/uploads/2025/09/carrotini-brainini.png"},
-        {n: "Центруччи Нуклуччи", i: "https://wotpack.ru/wp-content/uploads/2025/11/centrucci-nuclucci.png"},
-        {n: "Туалетто Фокачино", i: "https://wotpack.ru/wp-content/uploads/2025/09/toilettto-focaccino.png"},
-        {n: "Бананито Бандито", i: "https://wotpack.ru/wp-content/uploads/2025/10/bananito-bandito.png"}
-    ],
-    legendary: [
-        {n: "Бурбалони Лолилоли", i: "https://wotpack.ru/wp-content/uploads/2025/08/untitled209_20250808173522-e1755295811250.webp"},
-        {n: "Шимпанзини Бананини", i: "https://wotpack.ru/wp-content/uploads/2025/08/chimpanzini_bananini_steal_a_brainrot-e1755295841359.webp"},
-        {n: "Тириликалика Тириликалако", i: "https://wotpack.ru/wp-content/uploads/2025/09/tirilikalikatirilikalakotransparent-e1757959058700.webp"},
-        {n: "Балерина Капучино", i: "https://wotpack.ru/wp-content/uploads/2025/08/untitled206_20250808150027-e1755295950324.webp"},
-        {n: "Шеф Крабракадабра", i: "https://wotpack.ru/wp-content/uploads/2025/08/chef-crabracadabra-e1755296002988.webp"},
-        {n: "Лионели Кактусели", i: "https://wotpack.ru/wp-content/uploads/2025/08/lionel-cactuseli-e1755296039577.webp"},
-        {n: "Глорбо Фрутодрило", i: "https://wotpack.ru/wp-content/uploads/2025/08/glorbo_fruttodrillo-removebg-preview-e1755296071745.webp"},
-        {n: "Кивиоли Амелеонни", i: "https://wotpack.ru/wp-content/uploads/2025/08/quivioli_ameleonni-e1756664185192.webp"},
-        {n: "Блуберини Октопусини", i: "https://wotpack.ru/wp-content/uploads/2025/08/blueberrini_outopusini-e1755296205790.webp"},
-        {n: "Кликерино Крабо", i: "https://wotpack.ru/wp-content/uploads/2025/11/clickerino-crabo.png"},
-        {n: "Карамело Фильтрело", i: "https://wotpack.ru/wp-content/uploads/2025/09/caramello_filtrello-e1757522503304.webp"},
-        {n: "Строберели Фламингели", i: "https://wotpack.ru/wp-content/uploads/2025/08/strawberelli_flamingelli_steal_a_brainrot-e1755296331866.webp"},
-        {n: "Пипи Потато", i: "https://wotpack.ru/wp-content/uploads/2025/08/potato-e1756664130147.webp"},
-        {n: "Кокосини Мама", i: "https://wotpack.ru/wp-content/uploads/2025/08/cocosini_mama-e1755296401865.webp"},
-        {n: "Пандачини Бананини", i: "https://wotpack.ru/wp-content/uploads/2025/08/pandaccini_bananini-e1755296474202.webp"},
-        {n: "Пи Пи Арбуз", i: "https://wotpack.ru/wp-content/uploads/2025/08/pi_pi_watermelon-e1755296497112.webp"},
-        {n: "Сигма Бой", i: "https://wotpack.ru/wp-content/uploads/2025/08/sigma_boy-e1755296544707.webp"},
-        {n: "Синьор Карапасе", i: "https://wotpack.ru/wp-content/uploads/2025/09/teenage_turtle-e1757959097993.webp"},
-        {n: "Пуффабол", i: "https://wotpack.ru/wp-content/uploads/2025/11/puffaball-1.png"},
-        {n: "Сигма Гёрл", i: "https://wotpack.ru/wp-content/uploads/2025/09/sigma-girl.png"}
-    ]
-};
+    // База данных брейнротов
+    const db = {
+        so: [
+            {n:"Ла Вакка Сатурно Сатурнита", i:"https://wotpack.ru/wp-content/uploads/2025/08/la_vacca_saturno_saturnita_29-e1755293025817.webp"},
+            {n:"Лос Маттеос", i:"https://wotpack.ru/wp-content/uploads/2025/08/losmatteos-e1756661413375.webp"},
+            {n:"Бизонте Гуипитере", i:"https://wotpack.ru/wp-content/uploads/2025/09/bisonte_giuppitere_normal-e1757521116356.webp"},
+            {n:"Тренострузо Турбо 4000", i:"https://wotpack.ru/wp-content/uploads/2025/09/trenostruzzo4000-e1757521184798.webp"},
+            {n:"Джакорилла", i:"https://wotpack.ru/wp-content/uploads/2025/10/jackorilla.png"},
+            {n:"Тортугини Драгонфрутини", i:"https://wotpack.ru/wp-content/uploads/2025/08/torrtuginni_dragonfrutini_steal_a_brainrot-e1755293459959.webp"},
+            {n:"Дул Дул Дул", i:"https://wotpack.ru/wp-content/uploads/2025/08/dul_dul_dul-e1756665978961.webp"},
+            {n:"Чачечи", i:"https://wotpack.ru/wp-content/uploads/2025/09/chachechitransparent-e1757957803137.webp"},
+            {n:"Агарини ла Палини", i:"https://wotpack.ru/wp-content/uploads/2025/08/agarrini_la_palini-e1755293603109.webp"},
+            {n:"Лос Спайдеринис", i:"https://wotpack.ru/wp-content/uploads/2025/08/los_spyderinis.webp"},
+            {n:"Экстинкт Тралалеро", i:"https://wotpack.ru/wp-content/uploads/2025/09/jaws.webp"},
+            {n:"Фрагола Ла Ла Ла", i:"https://wotpack.ru/wp-content/uploads/2025/09/sammy_the_strawberry-e1757521259975.webp"},
+            {n:"Лос Тралалеритос", i:"https://wotpack.ru/wp-content/uploads/2025/08/los-tralaleritos-1-e1755293130756.webp"},
+            {n:"Лос Тортус", i:"https://wotpack.ru/wp-content/uploads/2025/10/los-tortus.png"},
+            {n:"Зомби Тралала", i:"https://wotpack.ru/wp-content/uploads/2025/11/zombie-tralala.png"},
+            {n:"Боатито Ауратито", i:"https://wotpack.ru/wp-content/uploads/2025/10/boatito-auratito.png"},
+            {n:"Гуериро Диджитале", i:"https://wotpack.ru/wp-content/uploads/2025/09/guerriro-digitale.png"},
+            {n:"Да мой экзамен", i:"https://wotpack.ru/wp-content/uploads/2025/09/yess-my-examine.png"},
+            {n:"Ла Каркеркар Комбинасион", i:"https://wotpack.ru/wp-content/uploads/2025/09/holy_falloff-e1757521338947.webp"},
+            {n:"Экстинкт Маттео", i:"https://wotpack.ru/wp-content/uploads/2025/09/man_im_dead-e1757958614235.webp"},
+            {n:"Пампкини Спайдерини", i:"https://wotpack.ru/wp-content/uploads/2025/10/pumpkini-spyderini.png"},
+            {n:"Лас Тралалеритас", i:"https://wotpack.ru/wp-content/uploads/2025/08/las-tralaleritas-e1755293190861.webp"},
+            {n:"Джоб Сахур", i:"https://wotpack.ru/wp-content/uploads/2025/08/job-e1756662798685.webp"},
+            {n:"Лас Вакитас Сатурнитас", i:"https://wotpack.ru/wp-content/uploads/2025/08/las_vaquitas_saturnitas_steal_a_brainrot-e1755293525478.webp"},
+            {n:"Лос Каркеритос", i:"https://wotpack.ru/wp-content/uploads/2025/11/los-karkeritos-1.png"},
+            {n:"Триколино", i:"https://wotpack.ru/wp-content/uploads/2025/10/trickolino.png"},
+            {n:"Грайпусени Медузини", i:"https://wotpack.ru/wp-content/uploads/2025/08/graipusseni_medussini_steal_a_brainrot-e1755293304918.webp"},
+            {n:"1x1x1x1", i:"https://wotpack.ru/wp-content/uploads/2025/11/1x1x1x1.png"},
+            {n:"Лос Кукарачас", i:"https://wotpack.ru/wp-content/uploads/2025/11/los-cucarachas.png"},
+            {n:"Куадрамат и Пакрахматмамат", i:"https://wotpack.ru/wp-content/uploads/2025/11/cuadramat-and-pakrahmatmamat.png"},
+            {n:"Лос Джобситос", i:"https://wotpack.ru/wp-content/uploads/2025/11/los-jobcitos.png"},
+            {n:"Тун Тун Тун Сахур", i:"https://wotpack.ru/wp-content/uploads/2025/08/tung_tung_tung_sahur-e1755297846897.webp"},
+            {n:"Нет мой экзамен", i:"https://wotpack.ru/wp-content/uploads/2025/09/noo-my-examine.png"},
+            {n:"Телеморте", i:"https://wotpack.ru/wp-content/uploads/2025/10/telemorte.png"},
+            {n:"Ла Сахур Комбинасион", i:"https://wotpack.ru/wp-content/uploads/2025/09/sahuria-e1757521298723.webp"},
+            {n:"Ту ту ту Сахур", i:"https://wotpack.ru/wp-content/uploads/2025/09/to-to-to-sahur.png"},
+            {n:"Пот Хотспот", i:"https://wotpack.ru/wp-content/uploads/2025/08/pot_hotspot_steal_a_brainrot-e1755293497315.webp"},
+            {n:"Пирулитоита Бисиклетейра", i:"https://wotpack.ru/wp-content/uploads/2025/11/pirulitoita-bicicleteira.png"},
+            {n:"Хорегини Бум", i:"https://wotpack.ru/wp-content/uploads/2025/10/horegini-boom.png"},
+            {n:"Чиклетейра Бисиклетейра", i:"https://wotpack.ru/wp-content/uploads/2025/08/chicleteira-bicicleteira.webp"},
+            {n:"Чиклетейрина Бисиклетейрина", i:"https://wotpack.ru/wp-content/uploads/2025/10/chicleteirina-bicicleteirina.png"},
+            {n:"Лос Кесадильяс", i:"https://wotpack.ru/wp-content/uploads/2025/11/los-quesadillas.png"},
+            {n:"Бурито Бандито", i:"https://wotpack.ru/wp-content/uploads/2025/10/burrito-bandito.png"},
+            {n:"Гость 666", i:"https://wotpack.ru/wp-content/uploads/2025/11/guest-666.png"},
+            {n:"Ранг Ринг Бас", i:"https://wotpack.ru/wp-content/uploads/2025/10/rang-ring-bus.png"},
+            {n:"Лос Буритос", i:"https://wotpack.ru/wp-content/uploads/2025/11/los-burritos.png"},
+            {n:"Лос Чиклетейрас", i:"https://wotpack.ru/wp-content/uploads/2025/09/los_shitheaditos-e1757958701997.webp"},
+            {n:"Брейнрот 67", i:"https://wotpack.ru/wp-content/uploads/2025/09/breynrot-67.png"},
+            {n:"Ла Гранде Комбинасион", i:"https://wotpack.ru/wp-content/uploads/2025/08/la_grande_combinasion_steal_a_brainrot-e1755293353133.webp"},
+            {n:"Сваэг Сода", i:"https://wotpack.ru/wp-content/uploads/2025/11/swag-soda.png"},
+            {n:"Нуклеаро Динозауро", i:"https://wotpack.ru/wp-content/uploads/2025/08/nuclearo_dinossauro_steal_a_brainrot-e1755293383535.webp"},
+            {n:"Лос Комбинасионас", i:"https://wotpack.ru/wp-content/uploads/2025/08/los_combinasionas_29-e1755293632368.webp"},
+            {n:"Фишино Кловнино", i:"https://wotpack.ru/wp-content/uploads/2025/11/fishino-clownino.png"},
+            {n:"Лас Сис", i:"https://wotpack.ru/wp-content/uploads/2025/09/las-sis.png"},
+            {n:"Лос Планитос", i:"https://wotpack.ru/wp-content/uploads/2025/11/los-planitos.png"},
+            {n:"Лос Спуки Комбинасьонас", i:"https://wotpack.ru/wp-content/uploads/2025/10/los-spooky-combinasionas.png"},
+            {n:"Лос Хотспотситос", i:"https://wotpack.ru/wp-content/uploads/2025/08/los_hotspotsitos2-e1755293676477.webp"},
+            {n:"Мани Мани Пагги", i:"https://wotpack.ru/wp-content/uploads/2025/09/money-money-puggy.png"},
+            {n:"Лос Сиксевен", i:"https://wotpack.ru/wp-content/uploads/2025/10/los-67.png"},
+            {n:"Селуларчини Вициозини", i:"https://wotpack.ru/wp-content/uploads/2025/09/celularcini-viciosini.png"},
+            {n:"25", i:"https://wotpack.ru/wp-content/uploads/2025/12/breynrot-25.png"},
+            {n:"Миететейра Чиклетейра", i:"https://wotpack.ru/wp-content/uploads/2025/10/mieteteira-chicleteira.png"},
+            {n:"Тралаледон", i:"https://wotpack.ru/wp-content/uploads/2025/09/brr_brr_patapem-e1757521387724.webp"},
+            {n:"Лос Паггис", i:"https://wotpack.ru/wp-content/uploads/2025/11/los-puggies.png"},
+            {n:"Есок Секолах", i:"https://wotpack.ru/wp-content/uploads/2025/08/esok_sekolah-e1755293760773.webp"},
+            {n:"Лос Примос", i:"https://wotpack.ru/wp-content/uploads/2025/09/los-primos.png"},
+            {n:"Лос Такоритас", i:"https://wotpack.ru/wp-content/uploads/2025/09/los-tacoritas.png"},
+            {n:"Кетупат Кепат", i:"https://wotpack.ru/wp-content/uploads/2025/08/ketupatkepat-e1756662458289.webp"},
+            {n:"Лос Брос", i:"https://wotpack.ru/wp-content/uploads/2025/09/broooooooo-e1757521421409.webp"},
+            {n:"Тиктак Сахур", i:"https://wotpack.ru/wp-content/uploads/2025/09/tictac-sahur.png"},
+            {n:"Оркаледон", i:"https://wotpack.ru/wp-content/uploads/2025/11/orcaledon-1.png"},
+            {n:"Ла Суприм Комбинасион", i:"https://wotpack.ru/wp-content/uploads/2025/08/supremecombinasion-e1756661029946.webp"},
+            {n:"Кетчуру и Мастуру", i:"https://wotpack.ru/wp-content/uploads/2025/09/ketchuru-e1757521475775.webp"},
+            {n:"Лавадорито Спинито", i:"https://wotpack.ru/wp-content/uploads/2025/11/lavadorito-spinito.png"},
+            {n:"Гарама и Мадундунг", i:"https://wotpack.ru/wp-content/uploads/2025/08/garama_and_mandundung_steal_a_brainrot-e1755293417807.webp"},
+            {n:"Спагетти Туалетти", i:"https://wotpack.ru/wp-content/uploads/2025/08/9ff4f5c6-6ad8-41a3-8e19-ffd9261102bc-removebg-preview-e1756660891710.webp"},
+            {n:"Лос Спагеттис", i:"https://wotpack.ru/wp-content/uploads/2025/11/los-spaghettis.png"},
+            {n:"Фраграма и Чокрама", i:"https://wotpack.ru/wp-content/uploads/2025/11/fragrama-and-chocrama.png"},
+            {n:"Ла Каса Бу", i:"https://wotpack.ru/wp-content/uploads/2025/10/la-casa-boo.png"},
+            {n:"Ла Сикрет Комбинасьен", i:"https://wotpack.ru/wp-content/uploads/2025/10/la-secret-combinasion.png"},
+            {n:"Капитано Моби", i:"https://wotpack.ru/wp-content/uploads/2025/11/capitano-moby.png"},
+            {n:"Бургуро и Фруюро", i:"https://wotpack.ru/wp-content/uploads/2025/10/burguro-and-fryuro.png"},
+            {n:"Куки и Милки", i:"https://wotpack.ru/wp-content/uploads/2025/12/cooki-and-milki.png"},
+            {n:"Всадник без головы", i:"https://wotpack.ru/wp-content/uploads/2025/10/headless-horseman.png"},
+            {n:"Драгон Канелони", i:"https://wotpack.ru/wp-content/uploads/2025/08/dragon_cannelloni-1-e1755293731680.webp"}
+        ],
+        divine: [
+            {n:"Кокофанто Элефанто", i:"https://wotpack.ru/wp-content/uploads/2025/08/cocofanto_elefanto_steal_a_brainrot-e1755293928227.webp"},
+            {n:"Антонио", i:"https://wotpack.ru/wp-content/uploads/2025/09/antonio.png"},
+            {n:"Жирафа Селестре", i:"https://wotpack.ru/wp-content/uploads/2025/08/girafa_celestre_steal_a_brainrot-e1755293973147.webp"},
+            {n:"Гататино Неонино", i:"https://wotpack.ru/wp-content/uploads/2025/08/gattatino_neonino_steal_a_brainrot-e1755294061788.webp"},
+            {n:"Маттео", i:"https://wotpack.ru/wp-content/uploads/2025/08/matteo_steal_a_brainrot-e1755294109367.webp"},
+            {n:"Тралалеро Тралала", i:"https://wotpack.ru/wp-content/uploads/2025/08/tralalero_tralala_steal_a_brainrot-e1755294158390.webp"},
+            {n:"Лос Крокодилитос", i:"https://wotpack.ru/wp-content/uploads/2025/08/los_crocodillitos-2-e1755294183457.webp"},
+            {n:"Тигролигре Фрутонни", i:"https://wotpack.ru/wp-content/uploads/2025/08/tigroligre-frutonni-e1755294986146.webp"},
+            {n:"Мани Мани Мен", i:"https://wotpack.ru/wp-content/uploads/2025/11/money-money-man.png"},
+            {n:"Эспрессо Синьора", i:"https://wotpack.ru/wp-content/uploads/2025/08/espresso_signora_steal_a_brainrot-e1755294215344.webp"},
+            {n:"Один Дин Дин Дун", i:"https://wotpack.ru/wp-content/uploads/2025/08/odin_din_din_dun_steal_a_brainrot-e1755294244201.webp"},
+            {n:"Statutino Libertino", i:"https://wotpack.ru/wp-content/uploads/2025/08/statutino_libertino_steal_a_brainrot-e1755294292537.webp"},
+            {n:"Туканно Бананно", i:"https://wotpack.ru/wp-content/uploads/2025/08/tukanno_bananno-e1755294371377.webp"},
+            {n:"Оркалеро Оркала", i:"https://wotpack.ru/wp-content/uploads/2025/08/orcalero_orcala_steal_a_brainrot-e1755295015126.webp"},
+            {n:"Тралалита Тралала", i:"https://wotpack.ru/wp-content/uploads/2025/09/tralalita-e1757522015418.webp"},
+            {n:"Экстинкт Балерина", i:"https://wotpack.ru/wp-content/uploads/2025/09/dead_art_form-e1757958789465.webp"},
+            {n:"Тренострузо Турбо 3000", i:"https://wotpack.ru/wp-content/uploads/2025/08/trenostruzzo_turbo_3000_steal_a_brainrot-e1755294407899.webp"},
+            {n:"Лос Чихуанинис", i:"https://wotpack.ru/wp-content/uploads/2025/11/los-chihuaninis.png"},
+            {n:"Трипи Тропи Тропи Трипа", i:"https://wotpack.ru/wp-content/uploads/2025/08/trippi_troppi_troppa_trippa-e1755294439392.webp"},
+            {n:"Лас Капучинас", i:"https://wotpack.ru/wp-content/uploads/2025/09/lascapuchinas-e1757522091518.webp"},
+            {n:"Балерини Лололо", i:"https://wotpack.ru/wp-content/uploads/2025/08/ballerino_lololo_steal_a_brainrot-e1755294485304.webp"},
+            {n:"Булбито Бандито Тракторито", i:"https://wotpack.ru/wp-content/uploads/2025/08/bulbito_bandito_traktorito.webp"},
+            {n:"Лос Тунтунтунгситос", i:"https://wotpack.ru/wp-content/uploads/2025/08/los_tungtungtungcitos-e1755294720476.webp"},
+            {n:"Пакрахматмамат", i:"https://wotpack.ru/wp-content/uploads/2025/08/pencil-e1756662960636.webp"},
+            {n:"Лос Бомбинитос", i:"https://wotpack.ru/wp-content/uploads/2025/09/los-bombinitos.png"},
+            {n:"Пиционе Мачина", i:"https://wotpack.ru/wp-content/uploads/2025/08/piccione_macchina_steal_a_brainrot-e1755294786161.webp"},
+            {n:"Бомбардини Тортини", i:"https://wotpack.ru/wp-content/uploads/2025/08/bombardini_tortinii-e1755294834533.webp"},
+            {n:"Пакрахматматина", i:"https://wotpack.ru/wp-content/uploads/2025/10/pakrahmatmatina.png"},
+            {n:"Тракторо Динозауро", i:"https://wotpack.ru/wp-content/uploads/2025/09/tractoro-dinosauro.png"},
+            {n:"Краббо Лимонетта", i:"https://wotpack.ru/wp-content/uploads/2025/09/crabbo-limonetta.png"},
+            {n:"Лос Оркалитос", i:"https://wotpack.ru/wp-content/uploads/2025/08/los_orcalitos-e1755294950333.webp"},
+            {n:"Оркалита Оркала", i:"https://wotpack.ru/wp-content/uploads/2025/09/img_2496-e1757522142572.webp"},
+            {n:"Какасито Саталито", i:"https://wotpack.ru/wp-content/uploads/2025/09/lebron_james-e1757522175873.webp"},
+            {n:"Акванавт", i:"https://wotpack.ru/wp-content/uploads/2025/11/aquanaut.png"},
+            {n:"Бр ес Те Патипум", i:"https://wotpack.ru/wp-content/uploads/2025/08/brr_es_teh_patipum-e1756663033257.webp"},
+            {n:"Корн Корн Корн Сахур", i:"https://wotpack.ru/wp-content/uploads/2025/12/corn-corn-corn-sahur.png"},
+            {n:"Татаруга Цистерна", i:"https://wotpack.ru/wp-content/uploads/2025/08/tartaruga_cisternaaaa-e1756663111257.webp"},
+            {n:"Скваланана", i:"https://wotpack.ru/wp-content/uploads/2025/10/squalanana.png"},
+            {n:"Дуг дуг дуг", i:"https://wotpack.ru/wp-content/uploads/2025/09/dug-dug-dug.png"},
+            {n:"Мумми Амбалабу", i:"https://wotpack.ru/wp-content/uploads/2025/10/mummy-ambalabu.png"},
+            {n:"Гранчиэлло Спирител", i:"https://wotpack.ru/wp-content/uploads/2025/11/granchiello-spiritell.png"},
+            {n:"Но Ла Полиция", i:"https://wotpack.ru/wp-content/uploads/2025/11/noo-la-polizia.png"},
+            {n:"Фрио Ниндзя", i:"https://wotpack.ru/wp-content/uploads/2025/11/frio-ninja.png"},
+            {n:"Пиционетта Машина", i:"https://wotpack.ru/wp-content/uploads/2025/09/that_one_pink_bird_from_angry_birds-e1757522213217.webp"},
+            {n:"Лос Гаттитос", i:"https://wotpack.ru/wp-content/uploads/2025/11/los-gattitos.png"},
+            {n:"Мастодонтико Телепьедоне", i:"https://wotpack.ru/wp-content/uploads/2025/09/clanker-e1757522245551.webp"},
+            {n:"Бамбу Бамбу Сахур", i:"https://wotpack.ru/wp-content/uploads/2025/10/bambu-bambu-sahur.png"},
+            {n:"Капучино Клоунино", i:"https://wotpack.ru/wp-content/uploads/2025/10/cappuccino-clownino.png"},
+            {n:"Анпали Бабель", i:"https://wotpack.ru/wp-content/uploads/2025/09/the_rock-e1757522280970.webp"},
+            {n:"Белуга", i:"https://wotpack.ru/wp-content/uploads/2025/09/beluga-e1757958840115.webp"},
+            {n:"Крупук Паги Паги", i:"https://wotpack.ru/wp-content/uploads/2025/10/krupuk-pagi-pagi.png"},
+            {n:"Поп Поп Сахур", i:"https://wotpack.ru/wp-content/uploads/2025/10/pop-pop-sahur.png"}
+        ],
+        ml: [
+            // Мифические + Легендарные
+            {n:"Фриго Камело", i:"https://wotpack.ru/wp-content/uploads/2025/08/frigocamelo.webp"},
+            {n:"Орангутини Ананасини", i:"https://wotpack.ru/wp-content/uploads/2025/08/orangutini-ananassini-1-e1755295250608.webp"},
+            {n:"Рино Тостерино", i:"https://wotpack.ru/wp-content/uploads/2025/08/untitled210_20250808180116-e1755295282108.webp"},
+            {n:"Бомбардиро Крокодило", i:"https://wotpack.ru/wp-content/uploads/2025/08/bombardiro_crocodilo_29-e1755295317935.webp"},
+            {n:"Бруто Гиалуто", i:"https://wotpack.ru/wp-content/uploads/2025/09/bruto_gialutto-e1757522347906.webp"},
+            {n:"Шпиониро Голубиро", i:"https://wotpack.ru/wp-content/uploads/2025/08/spioniro_golubiro_29-e1755295636758.webp"},
+            {n:"Бомбомбини Гусини", i:"https://wotpack.ru/wp-content/uploads/2025/08/bombombini_gusini_steal_a_brainrot-e1755295350349.webp"},
+            {n:"Зибра Зубра Зибралини", i:"https://wotpack.ru/wp-content/uploads/2025/08/zibra_zubra_zibralini-e1755295667262.webp"},
+            {n:"Тигрилини Вотермелини", i:"https://wotpack.ru/wp-content/uploads/2025/08/tigrilini_watermelini-e1755295698448.webp"},
+            {n:"Авокадорила", i:"https://wotpack.ru/wp-content/uploads/2025/08/avocadorilla-e1755295390504.webp"},
+            {n:"Кавало Виртуозо", i:"https://wotpack.ru/wp-content/uploads/2025/08/cavallo_virtuoso-e1755295420654.webp"},
+            {n:"Горило Сабвуфиро", i:"https://wotpack.ru/wp-content/uploads/2025/09/dubstep_boy-e1757522386890.webp"},
+            {n:"Горило Вотермелондрило", i:"https://wotpack.ru/wp-content/uploads/2025/08/gorillo-watermelondrillo-e1755295466811.webp"},
+            {n:"Стоппо Люминино", i:"https://wotpack.ru/wp-content/uploads/2025/11/stoppo-luminino.png"},
+            {n:"Топ Тоби Тоби", i:"https://wotpack.ru/wp-content/uploads/2025/08/tob_tobi_tobi-e1755295498362.webp"},
+            {n:"Лерулерулеруле", i:"https://wotpack.ru/wp-content/uploads/2025/08/lerulerulerule_stealy-e1756663829124.webp"},
+            {n:"Ганганзели Трулала", i:"https://wotpack.ru/wp-content/uploads/2025/08/ganganzelli_trulala-e1755295529336.webp"},
+            {n:"Те Те Те Сахур", i:"https://wotpack.ru/wp-content/uploads/2025/08/te_te_te_sahur-e1755295554584.webp"},
+            {n:"Рино Хеликоптерино", i:"https://wotpack.ru/wp-content/uploads/2025/09/rhino-helicopterino.png"},
+            {n:"Тракодукотулу Делапеладуструз", i:"https://wotpack.ru/wp-content/uploads/2025/08/tracoducotulu_delapeladustuz-e1756663568280.webp"},
+            {n:"Лос Нубинис", i:"https://wotpack.ru/wp-content/uploads/2025/09/noobinis-e1757522428651.webp"},
+            {n:"Качорито Мелонито", i:"https://wotpack.ru/wp-content/uploads/2025/10/cachorrito-melonito.png"},
+            {n:"Карлу", i:"https://wotpack.ru/wp-content/uploads/2025/08/carlooooo-e1756663714951.webp"},
+            {n:"Элефанто Фриго", i:"https://wotpack.ru/wp-content/uploads/2025/09/elefanto-frigo.png"},
+            {n:"Карротини Брейнини", i:"https://wotpack.ru/wp-content/uploads/2025/09/carrotini-brainini.png"},
+            {n:"Центруччи Нуклуччи", i:"https://wotpack.ru/wp-content/uploads/2025/11/centrucci-nuclucci.png"},
+            {n:"Туалетто Фокачино", i:"https://wotpack.ru/wp-content/uploads/2025/09/toilettto-focaccino.png"},
+            {n:"Бананито Бандито", i:"https://wotpack.ru/wp-content/uploads/2025/10/bananito-bandito.png"},
+            {n:"Бурбалони Лолилоли", i:"https://wotpack.ru/wp-content/uploads/2025/08/untitled209_20250808173522-e1755295811250.webp"},
+            {n:"Шимпанзини Бананини", i:"https://wotpack.ru/wp-content/uploads/2025/08/chimpanzini_bananini_steal_a_brainrot-e1755295841359.webp"},
+            {n:"Тириликалика Тириликалако", i:"https://wotpack.ru/wp-content/uploads/2025/09/tirilikalikatirilikalakotransparent-e1757959058700.webp"},
+            {n:"Балерина Капучино", i:"https://wotpack.ru/wp-content/uploads/2025/08/untitled206_20250808150027-e1755295950324.webp"},
+            {n:"Шеф Крабракадабра", i:"https://wotpack.ru/wp-content/uploads/2025/08/chef-crabracadabra-e1755296002988.webp"},
+            {n:"Лионели Кактусели", i:"https://wotpack.ru/wp-content/uploads/2025/08/lionel-cactuseli-e1755296039577.webp"},
+            {n:"Глорбо Фрутодрило", i:"https://wotpack.ru/wp-content/uploads/2025/08/glorbo_fruttodrillo-removebg-preview-e1755296071745.webp"},
+            {n:"Кивиоли Амелеонни", i:"https://wotpack.ru/wp-content/uploads/2025/08/quivioli_ameleonni-e1756664185192.webp"},
+            {n:"Блуберини Октопусини", i:"https://wotpack.ru/wp-content/uploads/2025/08/blueberrini_outopusini-e1755296205790.webp"},
+            {n:"Кликерино Крабо", i:"https://wotpack.ru/wp-content/uploads/2025/11/clickerino-crabo.png"},
+            {n:"Карамело Фильтрело", i:"https://wotpack.ru/wp-content/uploads/2025/09/caramello_filtrello-e1757522503304.webp"},
+            {n:"Строберели Фламингели", i:"https://wotpack.ru/wp-content/uploads/2025/08/strawberelli_flamingelli_steal_a_brainrot-e1755296331866.webp"},
+            {n:"Пипи Потато", i:"https://wotpack.ru/wp-content/uploads/2025/08/potato-e1756664130147.webp"},
+            {n:"Кокосини Мама", i:"https://wotpack.ru/wp-content/uploads/2025/08/cocosini_mama-e1755296401865.webp"},
+            {n:"Пандачини Бананини", i:"https://wotpack.ru/wp-content/uploads/2025/08/pandaccini_bananini-e1755296474202.webp"},
+            {n:"Пи Пи Арбуз", i:"https://wotpack.ru/wp-content/uploads/2025/08/pi_pi_watermelon-e1755296497112.webp"},
+            {n:"Сигма Бой", i:"https://wotpack.ru/wp-content/uploads/2025/08/sigma_boy-e1755296544707.webp"},
+            {n:"Синьор Карапасе", i:"https://wotpack.ru/wp-content/uploads/2025/09/teenage_turtle-e1757959097993.webp"},
+            {n:"Пуффабол", i:"https://wotpack.ru/wp-content/uploads/2025/11/puffaball-1.png"},
+            {n:"Сигма Гёрл", i:"https://wotpack.ru/wp-content/uploads/2025/09/sigma-girl.png"}
+        ],
+        ero: [
+            // Эпические + Редкие + Обычные
+            {n:"Капучино Ассасино", i:"https://wotpack.ru/wp-content/uploads/2025/08/untitled212_20250809133414-e1755296604804.webp"},
+            {n:"Бр Бр Патапим", i:"https://wotpack.ru/wp-content/uploads/2025/08/untitled203_20250808140930-e1755296689957.webp"},
+            {n:"Бандито Аксолито", i:"https://wotpack.ru/wp-content/uploads/2025/09/bandito_axolito1-e1757522570613.webp"},
+            {n:"Авокадини Антилопини", i:"https://wotpack.ru/wp-content/uploads/2025/08/avocadini_antilopini-e1756664270934.webp"},
+            {n:"Трулимеро Труличина", i:"https://wotpack.ru/wp-content/uploads/2025/08/untitled211_20250809125319-e1755296735375.webp"},
+            {n:"Маламе Амареле", i:"https://wotpack.ru/wp-content/uploads/2025/09/malameamarele-e1757522620979.webp"},
+            {n:"Бамбини Кростини", i:"https://wotpack.ru/wp-content/uploads/2025/08/untitled208_20250808152208-e1755296783344.webp"},
+            {n:"Бананита Долфинита", i:"https://wotpack.ru/wp-content/uploads/2025/08/bananita_dolphinita29-removebg-preview-e1755296846956.webp"},
+            {n:"Перочело Лемончело", i:"https://wotpack.ru/wp-content/uploads/2025/08/perochello-lemonchello-e1755296885241.webp"},
+            {n:"Бри Бри Бикус Дикус Бомбикус", i:"https://wotpack.ru/wp-content/uploads/2025/08/brri-brri-bicus-dicus-bombicus-1-e1755296918847.webp"},
+            {n:"Авокадини Гуффо", i:"https://wotpack.ru/wp-content/uploads/2025/08/avocadini-guffo-e1755296940395.webp"},
+            {n:"Ти Ти Ти Сахур", i:"https://wotpack.ru/wp-content/uploads/2025/08/ti_ti_ti_shaur-e1755296979203.webp"},
+            {n:"Манголини Парочини", i:"https://wotpack.ru/wp-content/uploads/2025/09/mangolini_parrocini-e1757522696928.webp"},
+            {n:"Фрогато Пирато", i:"https://wotpack.ru/wp-content/uploads/2025/10/frogato-pirato.png"},
+            {n:"Саламино Пингвино", i:"https://wotpack.ru/wp-content/uploads/2025/08/salamino-penguino-e1755297256497.webp"},
+            {n:"Дои Дои До", i:"https://wotpack.ru/wp-content/uploads/2025/11/doi-doi-do.png"},
+            {n:"Вомбо Ролло", i:"https://wotpack.ru/wp-content/uploads/2025/11/wombo-rollo.png"},
+            {n:"Пингвино Кокосино", i:"https://wotpack.ru/wp-content/uploads/2025/08/penguino_cocosino29-e1755297280452.webp"},
+            {n:"Мумио Рапитто", i:"https://wotpack.ru/wp-content/uploads/2025/10/mumio-rapitto.png"},
+            {n:"Бурбалони Лоли", i:"https://wotpack.ru/wp-content/uploads/2025/11/burbaloni-loli.png"},
+            {n:"Пирулитоита", i:"https://wotpack.ru/wp-content/uploads/2025/08/pirulitoita.webp"},
+            {n:"Пирулито", i:"https://wotpack.ru/wp-content/uploads/2025/09/pirulito.png"},
+            {n:"Лос Пирулитос", i:"https://wotpack.ru/wp-content/uploads/2025/09/los-pirulitos.png"},
+            {n:"Чиклетейра", i:"https://wotpack.ru/wp-content/uploads/2025/08/chicleteira-e1756664426553.webp"},
+            {n:"Лос Чиклетейрас", i:"https://wotpack.ru/wp-content/uploads/2025/11/los-chicleteiras.png"},
+            {n:"Кесадильо Вампиро", i:"https://wotpack.ru/wp-content/uploads/2025/10/quesadillo-vampiro.png"},
+            {n:"Мариачи Коразони", i:"https://wotpack.ru/wp-content/uploads/2025/09/mariachi-corazoni.png"},
+            {n:"Такорита Бисиклета", i:"https://wotpack.ru/wp-content/uploads/2025/09/tacorita-bicicleta.png"},
+            {n:"Лос Мобилис", i:"https://wotpack.ru/wp-content/uploads/2025/10/los-mobilis.png"},
+            {n:"Ла Экстинкт Гранде", i:"https://wotpack.ru/wp-content/uploads/2025/09/la_extinct_grande-e1757959281920.webp"},
+            {n:"Ла Спуки Гранде", i:"https://wotpack.ru/wp-content/uploads/2025/10/la-spooky-grande.png"},
+            {n:"Чипсо и Кесо", i:"https://wotpack.ru/wp-content/uploads/2025/10/chipso-and-queso.png"},
+            {n:"В или Л", i:"https://wotpack.ru/wp-content/uploads/2025/11/w-or-l.png"},
+            {n:"Эвилдон", i:"https://wotpack.ru/wp-content/uploads/2025/11/evildon.png"}
+        ]
+    };
 
-// Генерация категории "Все" (суммарно 266 персонажей с учетом Epic, которых я скрыл для краткости кода, но они есть в логике)
-DATA.all = [...DATA.secret, ...DATA.divine, ...DATA.mythical, ...DATA.legendary];
+    // Формируем "Все"
+    db.all = [...db.so, ...db.divine, ...db.ml, ...db.ero];
 
-let currentSet = [];
-let currentIndex = 0;
-let errors = 0;
-let timer;
-let timeLimit = 5000;
+    let state = {
+        type: '', diff: '', qs: [], idx: 0, err: 0, timer: null
+    };
 
-function start() {
-    const cat = document.getElementById('category').value;
-    timeLimit = parseInt(document.getElementById('difficulty').value);
-    currentSet = [...DATA[cat]].sort(() => Math.random() - 0.5);
-    
-    currentIndex = 0;
-    errors = 0;
-    
-    document.getElementById('menu').classList.add('hidden');
-    document.getElementById('quiz').classList.remove('hidden');
-    nextQuestion();
-}
-
-function nextQuestion() {
-    if (currentIndex >= currentSet.length) return finish();
-    
-    const item = currentSet[currentIndex];
-    document.getElementById('counter').innerText = `Персонаж ${currentIndex + 1} / ${currentSet.length}`;
-    document.getElementById('bar').style.width = `${(currentIndex / currentSet.length) * 100}%`;
-    document.getElementById('image').src = item.i;
-    
-    // Генерация кнопок (1 правильный + 3 случайных)
-    let options = [item.n];
-    let pool = DATA.all.filter(x => x.n !== item.n);
-    while(options.length < 4) {
-        let rand = pool[Math.floor(Math.random() * pool.length)].n;
-        if(!options.includes(rand)) options.push(rand);
+    function selType(t) {
+        state.type = t;
+        showS('m-diff');
     }
-    options.sort(() => Math.random() - 0.5);
-    
-    const container = document.getElementById('options');
-    container.innerHTML = '';
-    options.forEach(opt => {
-        const b = document.createElement('button');
-        b.className = 'btn';
-        b.innerText = opt;
-        b.onclick = () => check(opt === item.n);
-        container.appendChild(b);
-    });
-    
-    startTimer();
-}
 
-function startTimer() {
-    clearTimeout(timer);
-    timer = setTimeout(() => check(false), timeLimit);
-}
+    function goBack() { showS('m-type'); clearInterval(state.timer); }
 
-function check(correct) {
-    if (!correct) errors++;
-    currentIndex++;
-    nextQuestion();
-}
+    function showS(id) {
+        document.querySelectorAll('.glass-card > div').forEach(d => d.classList.add('hidden'));
+        document.getElementById(id).classList.remove('hidden');
+    }
 
-function finish() {
-    clearTimeout(timer);
-    document.getElementById('quiz').classList.add('hidden');
-    document.getElementById('results').classList.remove('hidden');
-    
-    const total = currentSet.length;
-    const score = total - errors;
-    const percent = (score / total) * 100;
-    
-    let grade = 2;
-    if (percent >= 98) grade = 5;
-    else if (percent >= 90) grade = 4;
-    else if (percent >= 75) grade = 3;
-    
-    document.getElementById('grade').innerText = `Ваша оценка: ${grade}`;
-    document.getElementById('stats-text').innerText = `Правильно: ${score} из ${total} (Ошибок: ${errors})`;
-}
+    function start(d) {
+        state.diff = d;
+        state.err = 0;
+        state.idx = 0;
+        // Перемешиваем и берем максимум 20 вопросов для динамики
+        state.qs = [...db[state.type]].sort(() => 0.5 - Math.random()).slice(0, 20);
+        showS('m-quiz');
+        renderQ();
+    }
+
+    function renderQ() {
+        if (state.idx >= state.qs.length) return finish();
+
+        const q = state.qs[state.idx];
+        document.getElementById('q-img').src = q.i;
+        document.getElementById('p-text').innerText = `${state.idx + 1}/${state.qs.length}`;
+        document.getElementById('p-fill').style.width = `${(state.idx / state.qs.length) * 100}%`;
+
+        const opts = document.getElementById('opts');
+        opts.innerHTML = '';
+        
+        let pool = [q.n];
+        while (pool.length < 6) {
+            let r = db.all[Math.floor(Math.random() * db.all.length)].n;
+            if (!pool.includes(r)) pool.push(r);
+        }
+        pool.sort(() => 0.5 - Math.random());
+
+        pool.forEach(o => {
+            const b = document.createElement('button');
+            b.className = 'opt-btn';
+            b.innerText = o;
+            b.onclick = () => answer(o === q.n);
+            opts.appendChild(b);
+        });
+
+        startT();
+    }
+
+    function startT() {
+        clearInterval(state.timer);
+        const sec = { easy: 5, medium: 4, hard: 3 }[state.diff];
+        let ms = sec * 1000;
+        const fill = document.getElementById('t-fill');
+        
+        const step = 20;
+        state.timer = setInterval(() => {
+            ms -= step;
+            fill.style.width = `${(ms / (sec * 1000)) * 100}%`;
+            if (ms <= 0) answer(false);
+        }, step);
+    }
+
+    function answer(ok) {
+        clearInterval(state.timer);
+        if (!ok) state.err++;
+        state.idx++;
+        renderQ();
+    }
+
+    function getGrade() {
+        const total = state.qs.length;
+        const e = state.err;
+        const p = ((total - e) / total) * 100;
+
+        if (state.type === 'all') {
+            // Система для общего теста
+            if (state.diff === 'easy') return e === 0 ? 5 : e === 1 ? 4 : e === 2 ? 3 : 2;
+            if (state.diff === 'medium') return e <= 1 ? 5 : e === 2 ? 4 : e === 3 ? 3 : 2;
+            if (state.diff === 'hard') return e <= 2 ? 5 : e === 3 ? 4 : e === 4 ? 3 : 2;
+        } else {
+            // Система по процентам
+            const bounds = {
+                easy: [100, 98, 96],
+                medium: [99, 97, 95],
+                hard: [98, 96, 94]
+            }[state.diff];
+            if (p >= bounds[0]) return 5;
+            if (p >= bounds[1]) return 4;
+            if (p >= bounds[2]) return 3;
+            return 2;
+        }
+        return 2;
+    }
+
+    function finish() {
+        const g = getGrade();
+        showS('m-res');
+        document.getElementById('r-grade').innerText = `Оценка: ${g}`;
+        document.getElementById('r-info').innerText = `Верно: ${state.qs.length - state.err} из ${state.qs.length}`;
+        
+        let history = JSON.parse(localStorage.getItem('br_stats') || '[]');
+        history.push({ date: new Date().toLocaleDateString(), t: state.type, d: state.diff, g: g });
+        localStorage.setItem('br_stats', JSON.stringify(history));
+    }
+
+    function showStats() {
+        showS('m-stats');
+        const list = document.getElementById('st-list');
+        const history = JSON.parse(localStorage.getItem('br_stats') || '[]');
+        list.innerHTML = history.length ? '' : 'Нет записей';
+        history.reverse().forEach(s => {
+            list.innerHTML += `<div class="stat-card"><b>${s.g}</b> — ${s.t} (${s.d}) <br><small>${s.date}</small></div>`;
+        });
+    }
 </script>
 
 </body>
