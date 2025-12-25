@@ -1,10 +1,9 @@
 /**
- * Brainrot Elite Quiz - Liquid Glass Edition
- * Полная база данных и логика приложения
+ * Brainrot Elite Quiz - Ultimate Edition
+ * Полная база: 266 персонажей
  */
 
 const brainrotDB = {
-    // [cite: 1, 2, 3]
     secret: [
         { name: "Ла Вакка Сатурно Сатурнита", img: "https://wotpack.ru/wp-content/uploads/2025/08/la_vacca_saturno_saturnita_29-e1755293025817.webp" },
         { name: "Лос Маттеос", img: "https://wotpack.ru/wp-content/uploads/2025/08/losmatteos-e1756661413375.webp" },
@@ -28,7 +27,7 @@ const brainrotDB = {
         { name: "Экстинкт Маттео", img: "https://wotpack.ru/wp-content/uploads/2025/09/man_im_dead-e1757958614235.webp" },
         { name: "Пампкини Спайдерини", img: "https://wotpack.ru/wp-content/uploads/2025/10/pumpkini-spyderini.png" },
         { name: "Лас Тралалеритас", img: "https://wotpack.ru/wp-content/uploads/2025/08/las-tralaleritas-e1755293190861.webp" },
-        { name: "Джоб Сахур", "img": "https://wotpack.ru/wp-content/uploads/2025/08/job-e1756662798685.webp" },
+        { name: "Джоб Сахур", img: "https://wotpack.ru/wp-content/uploads/2025/08/job-e1756662798685.webp" },
         { name: "Лас Вакитас Сатурнитас", img: "https://wotpack.ru/wp-content/uploads/2025/08/las_vaquitas_saturnitas_steal_a_brainrot-e1755293525478.webp" },
         { name: "Лос Каркеритос", img: "https://wotpack.ru/wp-content/uploads/2025/11/los-karkeritos-1.png" },
         { name: "Триколино", img: "https://wotpack.ru/wp-content/uploads/2025/10/trickolino.png" },
@@ -92,8 +91,6 @@ const brainrotDB = {
         { name: "Всадник без головы", img: "https://wotpack.ru/wp-content/uploads/2025/10/headless-horseman.png" },
         { name: "Драгон Канелони", img: "https://wotpack.ru/wp-content/uploads/2025/08/dragon_cannelloni-1-e1755293731680.webp" }
     ],
-
-    // [cite: 4, 5]
     divine: [
         { name: "Кокофанто Элефанто", img: "https://wotpack.ru/wp-content/uploads/2025/08/cocofanto_elefanto_steal_a_brainrot-e1755293928227.webp" },
         { name: "Антонио", img: "https://wotpack.ru/wp-content/uploads/2025/09/antonio.png" },
@@ -148,9 +145,7 @@ const brainrotDB = {
         { name: "Крупук Паги Паги", img: "https://wotpack.ru/wp-content/uploads/2025/10/krupuk-pagi-pagi.png" },
         { name: "Поп Поп Сахур", img: "https://wotpack.ru/wp-content/uploads/2025/10/pop-pop-sahur.png" }
     ],
-
-    // [cite: 5, 6]
-    mythic: [
+    mythical: [
         { name: "Фриго Камело", img: "https://wotpack.ru/wp-content/uploads/2025/08/frigocamelo.webp" },
         { name: "Орангутини Ананасини", img: "https://wotpack.ru/wp-content/uploads/2025/08/orangutini-ananassini-1-e1755295250608.webp" },
         { name: "Рино Тостерино", img: "https://wotpack.ru/wp-content/uploads/2025/08/untitled210_20250808180116-e1755295282108.webp" },
@@ -180,8 +175,28 @@ const brainrotDB = {
         { name: "Туалетто Фокачино", img: "https://wotpack.ru/wp-content/uploads/2025/09/toilettto-focaccino.png" },
         { name: "Бананито Бандито", img: "https://wotpack.ru/wp-content/uploads/2025/10/bananito-bandito.png" }
     ],
-
-    // [cite: 6, 7]
+    legendary: [
+        { name: "Бурбалони Лолилоли", img: "https://wotpack.ru/wp-content/uploads/2025/08/untitled209_20250808173522-e1755295811250.webp" },
+        { name: "Шимпанзини Бананини", img: "https://wotpack.ru/wp-content/uploads/2025/08/chimpanzini_bananini_steal_a_brainrot-e1755295841359.webp" },
+        { name: "Тириликалика Тириликалако", img: "https://wotpack.ru/wp-content/uploads/2025/09/tirilikalikatirilikalakotransparent-e1757959058700.webp" },
+        { name: "Балерина Капучино", img: "https://wotpack.ru/wp-content/uploads/2025/08/untitled206_20250808150027-e1755295950324.webp" },
+        { name: "Шеф Крабракадабра", img: "https://wotpack.ru/wp-content/uploads/2025/08/chef-crabracadabra-e1755296002988.webp" },
+        { name: "Лионели Кактусели", img: "https://wotpack.ru/wp-content/uploads/2025/08/lionel-cactuseli-e1755296039577.webp" },
+        { name: "Глорбо Фрутодрило", img: "https://wotpack.ru/wp-content/uploads/2025/08/glorbo_fruttodrillo-removebg-preview-e1755296071745.webp" },
+        { name: "Кивиоли Амелеонни", img: "https://wotpack.ru/wp-content/uploads/2025/08/quivioli_ameleonni-e1756664185192.webp" },
+        { name: "Блуберини Октопусини", img: "https://wotpack.ru/wp-content/uploads/2025/08/blueberrini_outopusini-e1755296205790.webp" },
+        { name: "Кликерино Крабо", img: "https://wotpack.ru/wp-content/uploads/2025/11/clickerino-crabo.png" },
+        { name: "Карамело Фильтрело", img: "https://wotpack.ru/wp-content/uploads/2025/09/caramello_filtrello-e1757522503304.webp" },
+        { name: "Строберели Фламингели", img: "https://wotpack.ru/wp-content/uploads/2025/08/strawberelli_flamingelli_steal_a_brainrot-e1755296331866.webp" },
+        { name: "Пипи Потато", img: "https://wotpack.ru/wp-content/uploads/2025/08/potato-e1756664130147.webp" },
+        { name: "Кокосини Мама", img: "https://wotpack.ru/wp-content/uploads/2025/08/cocosini_mama-e1755296401865.webp" },
+        { name: "Пандачини Бананини", img: "https://wotpack.ru/wp-content/uploads/2025/08/pandaccini_bananini-e1755296474202.webp" },
+        { name: "Пи Пи Арбуз", img: "https://wotpack.ru/wp-content/uploads/2025/08/pi_pi_watermelon-e1755296497112.webp" },
+        { name: "Сигма Бой", img: "https://wotpack.ru/wp-content/uploads/2025/08/sigma_boy-e1755296544707.webp" },
+        { name: "Синьор Карапасе", img: "https://wotpack.ru/wp-content/uploads/2025/09/teenage_turtle-e1757959097993.webp" },
+        { name: "Пуффабол", img: "https://wotpack.ru/wp-content/uploads/2025/11/puffaball-1.png" },
+        { name: "Сигма Гёрл", img: "https://wotpack.ru/wp-content/uploads/2025/09/sigma-girl.png" }
+    ],
     epic: [
         { name: "Капучино Ассасино", img: "https://wotpack.ru/wp-content/uploads/2025/08/untitled212_20250809133414-e1755296604804.webp" },
         { name: "Бр Бр Патапим", img: "https://wotpack.ru/wp-content/uploads/2025/08/untitled203_20250808140930-e1755296689957.webp" },
@@ -203,23 +218,79 @@ const brainrotDB = {
         { name: "Пингвино Кокосино", img: "https://wotpack.ru/wp-content/uploads/2025/08/penguino_cocosino29-e1755297280452.webp" },
         { name: "Мумио Рапитто", img: "https://wotpack.ru/wp-content/uploads/2025/10/mummio-rappitto.png" }
     ],
-
-    // Общий список для перемешивания и выбора фейковых ответов
-    all: []
+    rareCommon: [
+        { name: "Нубини Пицанини", img: "https://wotpack.ru/wp-content/uploads/2025/08/noobini_pizzanini_new-e1755298098182.webp" },
+        { name: "Лирили Ларила", img: "https://wotpack.ru/wp-content/uploads/2025/08/liliri_lalira-e1755298072558.webp" },
+        { name: "Тим Чиз", img: "https://wotpack.ru/wp-content/uploads/2025/08/tim_cheese-e1755298052615.webp" },
+        { name: "Флурифлура", img: "https://wotpack.ru/wp-content/uploads/2025/08/fluriflura-e1755298027660.webp" },
+        { name: "Талпа Ди Феро", img: "https://wotpack.ru/wp-content/uploads/2025/08/talpa_di_fero-e1755298002242.webp" },
+        { name: "Свинина Бомбардино", img: "https://wotpack.ru/wp-content/uploads/2025/08/homicidio_doloso-e1755297970414.webp" },
+        { name: "Пипи Киви", img: "https://wotpack.ru/wp-content/uploads/2025/08/pipi_kiwi-e1755297943255.webp" },
+        { name: "Тартарагно", img: "https://wotpack.ru/wp-content/uploads/2025/10/tartaragno.png" },
+        { name: "Пипи Корни", img: "https://wotpack.ru/wp-content/uploads/2025/08/pipi_corni_29-e1755297906920.webp" },
+        { name: "Трипи Тропи", img: "https://wotpack.ru/wp-content/uploads/2025/08/trippi_troppi-e1755297871795.webp" },
+        { name: "Гангстер Футера", img: "https://wotpack.ru/wp-content/uploads/2025/08/gangster-footera-e1755297774173.webp" },
+        { name: "Бандито Бобрито", img: "https://wotpack.ru/wp-content/uploads/2025/08/bandito-bobritto-4-e1755297732539.webp" },
+        { name: "Бонека Амбалабу", img: "https://wotpack.ru/wp-content/uploads/2025/08/boneca_ambalabu-e1755297691100.webp" },
+        { name: "Както Хипопотамо", img: "https://wotpack.ru/wp-content/uploads/2025/08/cactohipopotamo-e1755297668628.webp" },
+        { name: "Та Та Та Та Сахур", img: "https://wotpack.ru/wp-content/uploads/2025/08/ta-ta-ta-ta-sahur-1-e1755297558873.webp" },
+        { name: "Капкейк Коала", img: "https://wotpack.ru/wp-content/uploads/2025/11/cupcake-koala.png" },
+        { name: "Трик Трак Барабум", img: "https://wotpack.ru/wp-content/uploads/2025/08/tric-trac-baraboom-5-e1755297529210.webp" },
+        { name: "Пипи Авокадо", img: "https://wotpack.ru/wp-content/uploads/2025/08/pipi_avocado-e1755297471201.webp" },
+        { name: "Пинеалотто Фруттарино", img: "https://wotpack.ru/wp-content/uploads/2025/10/pinealotto-fruttarino.png" }
+    ],
+    exclusive: [
+        { name: "Ракуни Джанделини", img: "https://wotpack.ru/wp-content/uploads/2025/08/raccooni-e1756665221917.webp" },
+        { name: "Квакула", img: "https://wotpack.ru/wp-content/uploads/2025/10/quackula.png" },
+        { name: "Бухо де Фуего", img: "https://wotpack.ru/wp-content/uploads/2025/10/buho-de-fuego.png" },
+        { name: "Маги Риббитини", img: "https://wotpack.ru/wp-content/uploads/2025/10/magi-ribbitini.png" },
+        { name: "Gattatino Neonino (удален)", img: "https://wotpack.ru/wp-content/uploads/2025/08/gattatino_neonino_29-e1755298190694.webp" },
+        { name: "Гататино Нянино", img: "https://wotpack.ru/wp-content/uploads/2025/09/gattatin-e1757522799216.webp" },
+        { name: "Чихуанини Таконини", img: "https://wotpack.ru/wp-content/uploads/2025/09/chihuanini-taconini.png" },
+        { name: "Маттео OG", img: "https://wotpack.ru/wp-content/uploads/2025/08/matteo_steal_a_brainrot-1-e1755298233779.webp" },
+        { name: "Анклито Самито", img: "https://wotpack.ru/wp-content/uploads/2025/08/unclito-samito-300x300-1-e1756665883792.webp" },
+        { name: "Типи Топи Тако", img: "https://wotpack.ru/wp-content/uploads/2025/08/tipi_topi_taco-1-e1755298309160.webp" },
+        { name: "Эспрессо Синьора OG", img: "https://wotpack.ru/wp-content/uploads/2025/08/espresso_signora_steal_a_brainrot-1-e1755298255648.webp" },
+        { name: "Алессио", img: "https://wotpack.ru/wp-content/uploads/2025/08/alessioo-e1756665670949.webp" },
+        { name: "Капи Тако", img: "https://wotpack.ru/wp-content/uploads/2025/09/capi-taco.png" },
+        { name: "Гатито Такото", img: "https://wotpack.ru/wp-content/uploads/2025/09/gattito-tacoto.png" },
+        { name: "Лос Типи Такос", img: "https://wotpack.ru/wp-content/uploads/2025/09/los-tipi-tacos.png" },
+        { name: "Урубини Фламенгини", img: "https://wotpack.ru/wp-content/uploads/2025/08/baseball_urubini_flamenguini.webp" },
+        { name: "Джако Джек Джек", img: "https://wotpack.ru/wp-content/uploads/2025/10/jacko-jack-jack.png" },
+        { name: "Бомбардини Тортини OG", img: "https://wotpack.ru/wp-content/uploads/2025/08/bombardini_tortinii-1-e1755298277537.webp" },
+        { name: "Корн Корн Корн Сахур OG", img: "https://wotpack.ru/wp-content/uploads/2025/09/corn-corn-corn-sahur.png" },
+        { name: "Снейлензо", img: "https://wotpack.ru/wp-content/uploads/2025/10/snailenzo.png" },
+        { name: "Каркеркар Куркур", img: "https://wotpack.ru/wp-content/uploads/2025/08/karkerkarkurkur-e1755298213909.webp" },
+        { name: "Тентаколо Технико", img: "https://wotpack.ru/wp-content/uploads/2025/10/tentacolo-tecnico.png" },
+        { name: "Сэммини Спайдерини", img: "https://wotpack.ru/wp-content/uploads/2025/08/sammyni_spyderini_fr-e1756665927775.webp" },
+        { name: "Вултурино Скелетоно", img: "https://wotpack.ru/wp-content/uploads/2025/10/vulturino-skeletono.png" },
+        { name: "Кесадила Крокодила", img: "https://wotpack.ru/wp-content/uploads/2025/09/quesadilla-crocodila.png" },
+        { name: "Лос Хотспотситос OG", img: "https://wotpack.ru/wp-content/uploads/2025/09/los-nooo-my-hotspotsitos.png" },
+        { name: "Chimpanzini Spiderini", img: "https://wotpack.ru/wp-content/uploads/2025/08/chimpanzini_spiderini_29-e1755293095521.webp" },
+        { name: "Ла Кукарача", img: "https://wotpack.ru/wp-content/uploads/2025/09/la-cucaracha.png" },
+        { name: "Коза Черная дыра", img: "https://wotpack.ru/wp-content/uploads/2025/08/blackhole_goat-e1756665818137.webp" },
+        { name: "Хотспот", img: "https://wotpack.ru/wp-content/uploads/2025/08/nooo_my_hotspot29-e1755298331180.webp" },
+        { name: "Кесадило Вампиро", img: "https://wotpack.ru/wp-content/uploads/2025/10/quesadillo-vampiro.png" },
+        { name: "Мариачи Коразони", img: "https://wotpack.ru/wp-content/uploads/2025/09/mariachi-corazoni.png" },
+        { name: "Такорита Бисиклета", img: "https://wotpack.ru/wp-content/uploads/2025/09/tacorita-bicicleta.png" },
+        { name: "Лос Мобилис", img: "https://wotpack.ru/wp-content/uploads/2025/10/los-mobilis.png" },
+        { name: "Ла Экстинкт Гранде", img: "https://wotpack.ru/wp-content/uploads/2025/09/la_extinct_grande-e1757959281920.webp" },
+        { name: "Ла Спуки Гранде", img: "https://wotpack.ru/wp-content/uploads/2025/10/la-spooky-grande.png" },
+        { name: "Чипсо и Кесо", img: "https://wotpack.ru/wp-content/uploads/2025/10/chipso-and-queso.png" },
+        { name: "В или Л", img: "https://wotpack.ru/wp-content/uploads/2025/11/w-or-l.png" },
+        { name: "Эвилдон", img: "https://wotpack.ru/wp-content/uploads/2025/10/eviledon.png" },
+        { name: "Ла Тако Комбинасьон", img: "https://wotpack.ru/wp-content/uploads/2025/11/la-taco-combinasion.png" },
+        { name: "Спуки и Пампки", img: "https://wotpack.ru/wp-content/uploads/2025/10/spooky-and-pumpky.png" },
+        { name: "Мявл", img: "https://wotpack.ru/wp-content/uploads/2025/10/meowl.png" },
+        { name: "Клубничный слон", img: "https://wotpack.ru/wp-content/uploads/2025/09/strawberryelephant-e1757621873835.webp" }
+    ]
 };
 
-// Инициализация общей базы
-function setupDB() {
-    brainrotDB.all = [
-        ...brainrotDB.secret,
-        ...brainrotDB.divine,
-        ...brainrotDB.mythic,
-        ...brainrotDB.epic
-    ];
-}
-setupDB();
+// Сборка всех 266 элементов в один массив для режима "All"
+let allPool = [];
+Object.values(brainrotDB).forEach(cat => allPool = allPool.concat(cat));
 
-/** ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ **/
+// Глобальное состояние
 let selectedType = 'secret';
 let currentSet = [];
 let currentIndex = 0;
@@ -227,7 +298,7 @@ let score = { correct: 0, errors: 0 };
 let timerObj = null;
 let timeLimit = 5;
 
-/** ИНИЦИАЛИЗАЦИЯ ИНТЕРФЕЙСА **/
+/** ПЕРЕКЛЮЧЕНИЕ ТИПА ТЕСТА **/
 document.querySelectorAll('.card').forEach(card => {
     card.addEventListener('click', () => {
         document.querySelectorAll('.card').forEach(c => c.classList.remove('active'));
@@ -236,17 +307,21 @@ document.querySelectorAll('.card').forEach(card => {
     });
 });
 
-/** ЛОГИКА ТЕСТА **/
+/** ЗАПУСК КВИЗА **/
 function startQuiz() {
     const diff = document.querySelector('input[name="diff"]:checked').value;
     
-    // Настройка времени [cite: 5]
-    if (diff === 'easy') timeLimit = 5;
+    // Настройка времени
+    if (diff === 'easy') timeLimit = 6;
     else if (diff === 'medium') timeLimit = 4;
     else timeLimit = 3;
 
-    // Подготовка вопросов
-    currentSet = [...brainrotDB[selectedType]].sort(() => Math.random() - 0.5);
+    // Выбор набора
+    if (selectedType === 'all') {
+        currentSet = [...allPool].sort(() => Math.random() - 0.5);
+    } else {
+        currentSet = [...brainrotDB[selectedType]].sort(() => Math.random() - 0.5);
+    }
     
     currentIndex = 0;
     score.correct = 0;
@@ -256,6 +331,7 @@ function startQuiz() {
     loadQuestion();
 }
 
+/** ЗАГРУЗКА ВОПРОСА **/
 function loadQuestion() {
     if (currentIndex >= currentSet.length) {
         endQuiz();
@@ -264,13 +340,13 @@ function loadQuestion() {
 
     const question = currentSet[currentIndex];
     
-    // UI Update
+    // Обновление UI (с улучшенной контрастностью)
     document.getElementById('q-img').src = question.img;
     document.getElementById('curr').innerText = currentIndex + 1;
     document.getElementById('total').innerText = currentSet.length;
     document.getElementById('progress-bar').style.width = `${(currentIndex / currentSet.length) * 100}%`;
 
-    // Генерация кнопок
+    // Отрисовка кнопок
     const optionsBox = document.getElementById('options');
     optionsBox.innerHTML = '';
 
@@ -286,17 +362,23 @@ function loadQuestion() {
     startTimer();
 }
 
+/** ГЕНЕРАЦИЯ ВАРИАНТОВ **/
 function generateChoices(correctName) {
-    let pool = brainrotDB.all.map(b => b.name).filter(n => n !== correctName);
+    let poolNames = allPool.map(b => b.name).filter(n => n !== correctName);
     let result = [correctName];
     
+    // Берем 5 случайных из 266 возможных имен
     while (result.length < 6) {
-        let randomName = pool[Math.floor(Math.random() * pool.length)];
-        if (!result.includes(randomName)) result.push(randomName);
+        let randomIdx = Math.floor(Math.random() * poolNames.length);
+        let name = poolNames[randomIdx];
+        if (!result.includes(name)) {
+            result.push(name);
+        }
     }
     return result.sort(() => Math.random() - 0.5);
 }
 
+/** ТАЙМЕР **/
 function startTimer() {
     if (timerObj) clearTimeout(timerObj);
     
@@ -304,21 +386,33 @@ function startTimer() {
     bar.style.transition = 'none';
     bar.style.width = '100%';
 
-    setTimeout(() => {
-        bar.style.transition = `width ${timeLimit}s linear`;
-        bar.style.width = '0%';
-    }, 50);
+    // Форсируем перерисовку для анимации
+    void bar.offsetWidth;
+
+    bar.style.transition = `width ${timeLimit}s linear`;
+    bar.style.width = '0%';
 
     timerObj = setTimeout(() => handleAnswer(false), timeLimit * 1000);
 }
 
+/** ОБРАБОТКА ОТВЕТА **/
 function handleAnswer(isCorrect) {
     clearTimeout(timerObj);
-    if (isCorrect) score.correct++;
-    else score.errors++;
+    
+    const btns = document.querySelectorAll('.option-btn');
+    btns.forEach(b => b.disabled = true); // Блокировка повторных нажатий
 
-    currentIndex++;
-    loadQuestion();
+    if (isCorrect) {
+        score.correct++;
+    } else {
+        score.errors++;
+    }
+
+    // Небольшая задержка перед следующим вопросом
+    setTimeout(() => {
+        currentIndex++;
+        loadQuestion();
+    }, 150);
 }
 
 /** ФИНАЛ И СТАТИСТИКА **/
@@ -326,25 +420,32 @@ function endQuiz() {
     const total = currentSet.length;
     const errors = score.errors;
     const diff = document.querySelector('input[name="diff"]:checked').value;
+    
     let finalGrade = 2;
+    let gradeText = "Нужно подучить...";
+    let gradeColor = "#FF3B30";
 
-    // Логика оценки [cite: 5, 6]
-    if (selectedType === 'all') {
-        if (diff === 'easy') {
-            if (errors === 0) finalGrade = 5; else if (errors === 1) finalGrade = 4; else if (errors === 2) finalGrade = 3;
-        } else if (diff === 'medium') {
-            if (errors <= 1) finalGrade = 5; else if (errors === 2) finalGrade = 4; else if (errors === 3) finalGrade = 3;
-        } else {
-            if (errors <= 2) finalGrade = 5; else if (errors === 3) finalGrade = 4; else if (errors <= 4) finalGrade = 3;
-        }
-    } else {
-        const pct = (score.correct / total) * 100;
-        if (pct >= 98) finalGrade = 5;
-        else if (pct >= 95) finalGrade = 4;
-        else if (pct >= 90) finalGrade = 3;
+    // Строгая логика оценки (учитывая сложность)
+    if (diff === 'hard') {
+        if (errors <= 2) { finalGrade = 5; gradeText = "Отлично!"; gradeColor = "#34C759"; }
+        else if (errors <= 5) { finalGrade = 4; gradeText = "Хорошо"; gradeColor = "#FFCC00"; }
+        else if (errors <= 10) { finalGrade = 3; gradeText = "Удовлетворительно"; gradeColor = "#FF9500"; }
+    } else if (diff === 'medium') {
+        if (errors <= 1) { finalGrade = 5; gradeText = "Отлично!"; gradeColor = "#34C759"; }
+        else if (errors <= 3) { finalGrade = 4; gradeText = "Хорошо"; gradeColor = "#FFCC00"; }
+        else if (errors <= 6) { finalGrade = 3; gradeText = "Удовлетворительно"; gradeColor = "#FF9500"; }
+    } else { // Easy
+        if (errors === 0) { finalGrade = 5; gradeText = "Отлично!"; gradeColor = "#34C759"; }
+        else if (errors === 1) { finalGrade = 4; gradeText = "Хорошо"; gradeColor = "#FFCC00"; }
+        else if (errors === 2) { finalGrade = 3; gradeText = "Удовлетворительно"; gradeColor = "#FF9500"; }
     }
 
-    document.getElementById('res-grade-val').innerText = finalGrade;
+    // Обновление экрана результатов
+    const gradeEl = document.getElementById('res-grade-val');
+    gradeEl.innerText = finalGrade;
+    gradeEl.style.color = gradeColor;
+    
+    document.getElementById('res-grade-text').innerText = gradeText;
     document.getElementById('res-c').innerText = score.correct;
     document.getElementById('res-e').innerText = score.errors;
     
@@ -352,32 +453,35 @@ function endQuiz() {
     switchScreen('result');
 }
 
-function saveToHistory(grade, c, t) {
-    let history = JSON.parse(localStorage.getItem('br_stats_v2') || '[]');
-    history.unshift({
-        date: new Date().toLocaleDateString(),
-        grade,
-        score: `${c}/${t}`
-    });
-    localStorage.setItem('br_stats_v2', JSON.stringify(history.slice(0, 10)));
-}
-
-function showStats() {
-    const history = JSON.parse(localStorage.getItem('br_stats_v2') || '[]');
-    const list = document.getElementById('stats-list');
-    list.innerHTML = history.map(item => `
-        <div class="card" style="min-width: 100%; height: auto; margin-bottom: 10px; flex-direction: row; justify-content: space-between; padding: 15px;">
-            <span>${item.date}</span>
-            <b style="color: #34C759">Оценка: ${item.grade}</b>
-            <span>${item.score}</span>
-        </div>
-    `).join('') || '<p style="text-align:center; opacity: 0.5;">Истории пока нет</p>';
-    switchScreen('stats');
-}
-
+/** ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ **/
 function switchScreen(id) {
     document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
     document.getElementById(id).classList.add('active');
+}
+
+function saveToHistory(grade, c, t) {
+    let history = JSON.parse(localStorage.getItem('br_stats_v3') || '[]');
+    history.unshift({
+        date: new Date().toLocaleDateString() + " " + new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}),
+        grade,
+        score: `${c}/${t}`
+    });
+    localStorage.setItem('br_stats_v3', JSON.stringify(history.slice(0, 10)));
+}
+
+function showStats() {
+    const history = JSON.parse(localStorage.getItem('br_stats_v3') || '[]');
+    const list = document.getElementById('stats-list');
+    list.innerHTML = history.map(item => `
+        <div class="stat-card">
+            <div style="font-size: 12px; opacity: 0.6">${item.date}</div>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 5px;">
+                <b style="font-size: 20px">Оценка: ${item.grade}</b>
+                <span style="background: rgba(255,255,255,0.1); padding: 4px 10px; border-radius: 10px">${item.score}</span>
+            </div>
+        </div>
+    `).join('') || '<p style="text-align:center; opacity: 0.5;">Истории пока нет</p>';
+    switchScreen('stats');
 }
 
 function hideStats() { switchScreen('menu'); }
