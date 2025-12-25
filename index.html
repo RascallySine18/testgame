@@ -3,67 +3,102 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Brainrot Quiz</title>
+    <title>Brainrot Elite Quiz</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div id="app" class="glass-container">
+    <div class="wallpaper-bg"></div>
+    
+    <div id="app">
         <div id="menu" class="screen active">
-            <h1>Брейнроты</h1>
-            <div class="selection-group">
-                <label>Вид теста:</label>
-                <select id="test-type">
-                    <option value="secret">Секретные + Эксклюзивные + OG</option>
-                    <option value="divine">Божественные</option>
-                    <option value="mythic_legend">Мифические + Легендарные</option>
-                    <option value="epic_rare_common">Эпические + Редкие + Обычные</option>
-                    <option value="all">Общий тест (Все)</option>
-                </select>
+            <header>
+                <h1 class="ios-title">Брейнроты</h1>
+                <p class="ios-subtitle">Выберите режим испытания</p>
+            </header>
+
+            <div class="test-carousel">
+                <div class="card active" data-type="secret">
+                    <div class="card-icon">🔐</div>
+                    <h3>Секретные</h3>
+                    <p>Эксклюзивные + OG</p>
+                </div>
+                <div class="card" data-type="divine">
+                    <div class="card-icon">⚡️</div>
+                    <h3>Божественные</h3>
+                    <p>Высший разум</p>
+                </div>
+                <div class="card" data-type="mythic">
+                    <div class="card-icon">🔮</div>
+                    <h3>Мифические</h3>
+                    <p>+ Легендарные</p>
+                </div>
+                <div class="card" data-type="epic">
+                    <div class="card-icon">💎</div>
+                    <h3>Эпические</h3>
+                    <p>+ Редкие + Обычные</p>
+                </div>
+                <div class="card" data-type="all">
+                    <div class="card-icon">🌀</div>
+                    <h3>Общий тест</h3>
+                    <p>Все брейнроты</p>
+                </div>
             </div>
-            <div class="selection-group">
-                <label>Сложность:</label>
-                <select id="difficulty">
-                    <option value="easy">Легкий (5 сек)</option>
-                    <option value="medium">Средний (4 сек)</option>
-                    <option value="hard">Сложный (3 сек)</option>
-                </select>
+
+            <div class="difficulty-section">
+                <p class="section-label">Сложность</p>
+                <div class="segmented-control">
+                    <input type="radio" name="diff" value="easy" id="easy" checked>
+                    <label for="easy">Легко</label>
+                    <input type="radio" name="diff" value="medium" id="medium">
+                    <label for="medium">Средне</label>
+                    <input type="radio" name="diff" value="hard" id="hard">
+                    <label for="hard">Сложно</label>
+                </div>
             </div>
-            <button onclick="startQuiz()" class="btn-main">Начать тест</button>
-            <button onclick="showStats()" class="btn-secondary">Статистика</button>
+
+            <button onclick="startQuiz()" class="ios-btn-primary">Начать</button>
+            <button onclick="showStats()" class="ios-btn-secondary">Статистика</button>
         </div>
 
         <div id="quiz" class="screen">
-            <div class="progress-info">
-                <span>Прогресс: <span id="current-q">0</span>/<span id="total-q">0</span></span>
+            <div class="top-nav">
+                <div class="timer-wrapper">
+                    <div id="timer-bar"></div>
+                </div>
+                <div class="progress-wrapper">
+                    <div id="progress-bar"></div>
+                </div>
+                <div class="counter"><span id="curr">1</span> / <span id="total">0</span></div>
             </div>
-            <div class="progress-container">
-                <div id="progress-bar" class="progress-fill"></div>
+
+            <div class="question-container">
+                <div class="glass-image-holder">
+                    <img id="q-img" src="" alt="">
+                </div>
             </div>
-            <div class="timer-container">
-                <div id="timer-bar" class="timer-fill"></div>
-            </div>
-            <div class="image-box">
-                <img id="question-img" src="" alt="Brainrot">
-            </div>
+
             <div id="options" class="options-grid"></div>
         </div>
 
-        <div id="result" class="screen">
-            <h2 id="result-grade">Оценка</h2>
-            <div class="stats-summary">
-                <p>Верно: <span id="res-correct"></span></p>
-                <p>Ошибок: <span id="res-errors"></span></p>
+        <div id="result" class="screen result-screen">
+            <div class="result-glass-card">
+                <h2 id="res-grade-val">5</h2>
+                <p id="res-comment">Отлично!</p>
+                <div class="res-details">
+                    <div><span>Верно:</span> <b id="res-c">0</b></div>
+                    <div><span>Ошибок:</span> <b id="res-e">0</b></div>
+                </div>
+                <button onclick="location.reload()" class="ios-btn-primary">В меню</button>
             </div>
-            <button onclick="location.reload()" class="btn-main">В меню</button>
         </div>
 
         <div id="stats" class="screen">
-            <h2>Статистика</h2>
-            <div id="stats-history" class="history-list"></div>
-            <button onclick="hideStats()" class="btn-main">Назад</button>
-            <button onclick="clearStats()" class="btn-danger">Очистить данные</button>
+            <h2 class="ios-title">История</h2>
+            <div id="stats-list" class="stats-scroll"></div>
+            <button onclick="hideStats()" class="ios-btn-secondary">Назад</button>
         </div>
     </div>
+
     <script src="script.js"></script>
 </body>
 </html>
