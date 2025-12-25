@@ -6,153 +6,160 @@
     <title>Brainrot Ultimate Quiz</title>
     <style>
         :root {
-            --glass-bg: rgba(255, 255, 255, 0.25);
+            --glass: rgba(255, 255, 255, 0.2);
             --glass-border: rgba(255, 255, 255, 0.4);
-            --text-color: #1d1d1f;
             --accent: #007aff;
-            --ios-blur: blur(25px);
+            --text: #1c1c1e;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", sans-serif; }
 
         body {
-            background: linear-gradient(160deg, #e0c3fc 0%, #8ec5fc 100%);
+            background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 99%, #fad0c4 100%);
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
             padding: 15px;
-            color: var(--text-color);
-            -webkit-font-smoothing: antialiased;
+            color: var(--text);
         }
 
         .glass-card {
-            background: var(--glass-bg);
-            backdrop-filter: var(--ios-blur);
-            -webkit-backdrop-filter: var(--ios-blur);
+            background: var(--glass);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
             border: 1px solid var(--glass-border);
             border-radius: 35px;
             width: 100%;
-            max-width: 550px;
-            padding: 30px;
-            box-shadow: 0 15px 45px rgba(0,0,0,0.1);
+            max-width: 600px;
+            padding: 25px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
             text-align: center;
             position: relative;
-            overflow: hidden;
         }
 
-        h1 { font-weight: 700; margin-bottom: 25px; font-size: 26px; letter-spacing: -0.8px; }
+        h1 { font-size: 24px; margin-bottom: 20px; font-weight: 700; letter-spacing: -0.5px; }
 
-        /* Прогресс-бары */
-        .progress-container { width: 100%; height: 6px; background: rgba(0,0,0,0.08); border-radius: 10px; margin: 12px 0; overflow: hidden; }
-        .progress-fill { height: 100%; background: var(--accent); width: 0%; transition: width 0.4s cubic-bezier(0.25, 0.1, 0.25, 1); }
-        .timer-bar { background: #ff3b30; transition: width 0.1s linear; }
+        /* Сетка категорий 2 столбца */
+        .grid-menu {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
 
-        .stats-info { font-size: 14px; font-weight: 500; opacity: 0.8; margin-bottom: 4px; display: flex; justify-content: space-between; }
+        .btn {
+            background: rgba(255, 255, 255, 0.6);
+            border: 1px solid var(--glass-border);
+            padding: 18px 10px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 14px;
+            transition: 0.3s;
+            color: var(--text);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .btn:hover { background: white; transform: scale(1.02); }
+        .btn-main { background: var(--accent); color: white; border: none; grid-column: span 2; font-size: 16px; }
 
-        /* Картинка вопроса */
-        .q-box {
+        /* Стили квиза */
+        .info-bar { display: flex; justify-content: space-between; font-size: 13px; font-weight: 600; margin-bottom: 5px; opacity: 0.8; }
+        .progress-box { width: 100%; height: 8px; background: rgba(0,0,0,0.05); border-radius: 10px; margin-bottom: 15px; overflow: hidden; }
+        .progress-fill { height: 100%; background: var(--accent); width: 0%; transition: width 0.3s; }
+        .timer-fill { background: #ff3b30; transition: width 0.1s linear; }
+
+        .image-box {
             width: 100%;
-            height: 240px;
-            border-radius: 22px;
+            height: 250px;
+            border-radius: 25px;
             background: rgba(255,255,255,0.3);
-            margin: 15px 0;
+            margin-bottom: 20px;
             display: flex;
             align-items: center;
             justify-content: center;
             border: 1px solid var(--glass-border);
-            box-shadow: inset 0 0 15px rgba(255,255,255,0.5);
+            overflow: hidden;
         }
-        .q-box img { max-width: 90%; max-height: 90%; object-fit: contain; border-radius: 10px; }
+        .image-box img { max-width: 100%; max-height: 100%; object-fit: contain; }
 
-        /* Сетка ответов (6 вариантов) */
-        .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 15px; }
-        @media (max-width: 480px) { .options-grid { grid-template-columns: 1fr; } }
-
+        .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
         .opt-btn {
-            background: rgba(255, 255, 255, 0.4);
+            background: rgba(255,255,255,0.5);
             border: 1px solid var(--glass-border);
-            padding: 16px;
-            border-radius: 18px;
+            padding: 15px 5px;
+            border-radius: 15px;
+            font-size: 13px;
+            font-weight: 500;
             cursor: pointer;
-            font-size: 15px;
-            font-weight: 600;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            color: var(--text-color);
+            transition: 0.2s;
         }
-        .opt-btn:hover { background: rgba(255, 255, 255, 0.7); transform: scale(1.02); }
-        .opt-btn:active { transform: scale(0.98); }
+        .opt-btn:hover { background: rgba(255,255,255,0.8); }
 
-        /* Навигация */
-        .menu-stack { display: flex; flex-direction: column; gap: 12px; }
-        .nav-btn {
-            padding: 20px;
-            border-radius: 20px;
-            border: none;
-            background: var(--accent);
-            color: white;
-            font-weight: 700;
-            font-size: 16px;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-        .secondary-btn { background: rgba(255,255,255,0.5); color: var(--text-color); }
-        .hidden { display: none; }
+        /* Статистика */
+        .stats-container { text-align: left; background: rgba(255,255,255,0.3); padding: 20px; border-radius: 25px; margin: 20px 0; }
+        .stat-row { display: flex; justify-content: space-between; margin-bottom: 10px; border-bottom: 1px solid rgba(0,0,0,0.05); padding-bottom: 5px; }
         
-        .stats-list { display: grid; grid-template-columns: 1fr; gap: 8px; max-height: 300px; overflow-y: auto; text-align: left; }
-        .stat-card { background: rgba(255,255,255,0.3); padding: 12px; border-radius: 15px; font-size: 14px; }
+        .hidden { display: none; }
+        @media (max-width: 480px) { .options-grid { grid-template-columns: 1fr; } .image-box { height: 180px; } }
     </style>
 </head>
 <body>
 
 <div class="glass-card">
-    <div id="m-type">
-        <h1>Тип теста</h1>
-        <div class="menu-stack">
-            <button class="nav-btn secondary-btn" onclick="selType('so')">Секретные + Эксклюзивные + OG</button>
-            <button class="nav-btn secondary-btn" onclick="selType('divine')">Божественные</button>
-            <button class="nav-btn secondary-btn" onclick="selType('ml')">Мифические + Легендарные</button>
-            <button class="nav-btn secondary-btn" onclick="selType('ero')">Эпические + Редкие + Обычные</button>
-            <button class="nav-btn" onclick="selType('all')">Общий тест (Все 266)</button>
-            <button class="nav-btn secondary-btn" onclick="showStats()">Статистика</button>
+    <div id="screen-menu">
+        <h1>Brainrot Quiz</h1>
+        <div class="grid-menu">
+            <button class="btn" onclick="setType('secret')">Секретные + Эксклюзивные + OG</button>
+            <button class="btn" onclick="setType('divine')">Божественные</button>
+            <button class="btn" onclick="setType('mythic')">Мифические + Легендарные</button>
+            <button class="btn" onclick="setType('epic')">Эпические + Редкие + Обычные</button>
+            <button class="btn btn-main" onclick="setType('all')">ОБЩИЙ ТЕСТ (ВСЕ БРЕЙНРОТЫ)</button>
+            <button class="btn" onclick="showHistory()" style="grid-column: span 2; background: none;">📊 История достижений</button>
         </div>
     </div>
 
-    <div id="m-diff" class="hidden">
+    <div id="screen-diff" class="hidden">
         <h1>Сложность</h1>
-        <div class="menu-stack">
-            <button class="nav-btn secondary-btn" onclick="start('easy')">Легкий (5 сек)</button>
-            <button class="nav-btn secondary-btn" onclick="start('medium')">Средний (4 сек)</button>
-            <button class="nav-btn secondary-btn" onclick="start('hard')">Сложный (3 сек)</button>
-            <button class="nav-btn secondary-btn" onclick="goBack()">Назад</button>
+        <div class="grid-menu">
+            <button class="btn" onclick="start('easy')">Легкий (5 сек)</button>
+            <button class="btn" onclick="start('medium')">Средний (4 сек)</button>
+            <button class="btn" onclick="start('hard')">Сложный (3 сек)</button>
+            <button class="btn" onclick="backToMenu()">Назад</button>
         </div>
     </div>
 
-    <div id="m-quiz" class="hidden">
-        <div class="stats-info"><span id="t-text">Время</span><span id="p-text">1/10</span></div>
-        <div class="progress-container"><div id="t-fill" class="progress-fill timer-bar"></div></div>
-        <div class="progress-container"><div id="p-fill" class="progress-fill"></div></div>
-        <div class="q-box"><img src="" id="q-img"></div>
-        <div class="options-grid" id="opts"></div>
+    <div id="screen-quiz" class="hidden">
+        <div class="info-bar">
+            <span id="q-count-text">Вопрос 1 / 266</span>
+            <span id="timer-text">3.0 сек</span>
+        </div>
+        <div class="progress-box"><div id="timer-fill" class="progress-fill timer-fill"></div></div>
+        <div class="progress-box"><div id="q-fill" class="progress-fill"></div></div>
+        
+        <div class="image-box"><img id="q-img" src="" alt=""></div>
+        
+        <div class="options-grid" id="options-box"></div>
     </div>
 
-    <div id="m-res" class="hidden">
-        <h1 id="r-grade">Оценка: 5</h1>
-        <p id="r-info" style="margin-bottom: 20px;"></p>
-        <button class="nav-btn" onclick="goBack()" style="width: 100%;">В меню</button>
+    <div id="screen-res" class="hidden">
+        <h1 id="res-grade">Оценка: 5</h1>
+        <div class="stats-container" id="res-stats"></div>
+        <button class="btn btn-main" onclick="backToMenu()">В главное меню</button>
     </div>
 
-    <div id="m-stats" class="hidden">
+    <div id="screen-history" class="hidden">
         <h1>Статистика</h1>
-        <div id="st-list" class="stats-list"></div>
-        <button class="nav-btn secondary-btn" onclick="goBack()" style="width: 100%; margin-top: 20px;">Назад</button>
+        <div id="history-list" style="max-height: 300px; overflow-y: auto;"></div>
+        <button class="btn btn-main" onclick="backToMenu()" style="margin-top:15px;">Закрыть</button>
     </div>
 </div>
 
 <script>
-    // База данных брейнротов
-    const db = {
-        so: [
+    // ВСЕ БРЕЙНРОТЫ ИЗ ФАЙЛА (266 объектов)
+    const DATA = {
+        secret: [
             {n:"Ла Вакка Сатурно Сатурнита", i:"https://wotpack.ru/wp-content/uploads/2025/08/la_vacca_saturno_saturnita_29-e1755293025817.webp"},
             {n:"Лос Маттеос", i:"https://wotpack.ru/wp-content/uploads/2025/08/losmatteos-e1756661413375.webp"},
             {n:"Бизонте Гуипитере", i:"https://wotpack.ru/wp-content/uploads/2025/09/bisonte_giuppitere_normal-e1757521116356.webp"},
@@ -293,8 +300,7 @@
             {n:"Крупук Паги Паги", i:"https://wotpack.ru/wp-content/uploads/2025/10/krupuk-pagi-pagi.png"},
             {n:"Поп Поп Сахур", i:"https://wotpack.ru/wp-content/uploads/2025/10/pop-pop-sahur.png"}
         ],
-        ml: [
-            // Мифические + Легендарные
+        mythic: [
             {n:"Фриго Камело", i:"https://wotpack.ru/wp-content/uploads/2025/08/frigocamelo.webp"},
             {n:"Орангутини Ананасини", i:"https://wotpack.ru/wp-content/uploads/2025/08/orangutini-ananassini-1-e1755295250608.webp"},
             {n:"Рино Тостерино", i:"https://wotpack.ru/wp-content/uploads/2025/08/untitled210_20250808180116-e1755295282108.webp"},
@@ -344,8 +350,7 @@
             {n:"Пуффабол", i:"https://wotpack.ru/wp-content/uploads/2025/11/puffaball-1.png"},
             {n:"Сигма Гёрл", i:"https://wotpack.ru/wp-content/uploads/2025/09/sigma-girl.png"}
         ],
-        ero: [
-            // Эпические + Редкие + Обычные
+        epic: [
             {n:"Капучино Ассасино", i:"https://wotpack.ru/wp-content/uploads/2025/08/untitled212_20250809133414-e1755296604804.webp"},
             {n:"Бр Бр Патапим", i:"https://wotpack.ru/wp-content/uploads/2025/08/untitled203_20250808140930-e1755296689957.webp"},
             {n:"Бандито Аксолито", i:"https://wotpack.ru/wp-content/uploads/2025/09/bandito_axolito1-e1757522570613.webp"},
@@ -383,97 +388,117 @@
         ]
     };
 
-    // Формируем "Все"
-    db.all = [...db.so, ...db.divine, ...db.ml, ...db.ero];
+    const ALL_ITEMS = [...DATA.secret, ...DATA.divine, ...DATA.mythic, ...DATA.epic];
 
     let state = {
-        type: '', diff: '', qs: [], idx: 0, err: 0, timer: null
+        type: '', 
+        diff: '', 
+        questions: [], 
+        index: 0, 
+        errors: 0, 
+        timer: null, 
+        timeLeft: 0,
+        maxTime: 0
     };
 
-    function selType(t) {
+    function setType(t) {
         state.type = t;
-        showS('m-diff');
-    }
-
-    function goBack() { showS('m-type'); clearInterval(state.timer); }
-
-    function showS(id) {
-        document.querySelectorAll('.glass-card > div').forEach(d => d.classList.add('hidden'));
-        document.getElementById(id).classList.remove('hidden');
+        showScreen('screen-diff');
     }
 
     function start(d) {
         state.diff = d;
-        state.err = 0;
-        state.idx = 0;
-        // Перемешиваем и берем максимум 20 вопросов для динамики
-        state.qs = [...db[state.type]].sort(() => 0.5 - Math.random()).slice(0, 20);
-        showS('m-quiz');
-        renderQ();
+        state.index = 0;
+        state.errors = 0;
+        state.maxTime = { easy: 5, medium: 4, hard: 3 }[d];
+
+        let pool = state.type === 'all' ? ALL_ITEMS : DATA[state.type];
+        state.questions = [...pool].sort(() => 0.5 - Math.random()); // Все вопросы из категории
+
+        showScreen('screen-quiz');
+        renderQuestion();
     }
 
-    function renderQ() {
-        if (state.idx >= state.qs.length) return finish();
+    function renderQuestion() {
+        if (state.index >= state.questions.length) return finish();
 
-        const q = state.qs[state.idx];
+        const q = state.questions[state.index];
         document.getElementById('q-img').src = q.i;
-        document.getElementById('p-text').innerText = `${state.idx + 1}/${state.qs.length}`;
-        document.getElementById('p-fill').style.width = `${(state.idx / state.qs.length) * 100}%`;
+        document.getElementById('q-count-text').innerText = `Вопрос ${state.index + 1} / ${state.questions.length}`;
+        document.getElementById('q-fill').style.width = `${(state.index / state.questions.length) * 100}%`;
 
-        const opts = document.getElementById('opts');
-        opts.innerHTML = '';
-        
-        let pool = [q.n];
-        while (pool.length < 6) {
-            let r = db.all[Math.floor(Math.random() * db.all.length)].n;
-            if (!pool.includes(r)) pool.push(r);
+        const box = document.getElementById('options-box');
+        box.innerHTML = '';
+
+        let opts = [q.n];
+        while (opts.length < 6) {
+            let r = ALL_ITEMS[Math.floor(Math.random() * ALL_ITEMS.length)].n;
+            if (!opts.includes(r)) opts.push(r);
         }
-        pool.sort(() => 0.5 - Math.random());
+        opts.sort(() => 0.5 - Math.random());
 
-        pool.forEach(o => {
+        opts.forEach(o => {
             const b = document.createElement('button');
             b.className = 'opt-btn';
             b.innerText = o;
             b.onclick = () => answer(o === q.n);
-            opts.appendChild(b);
+            box.appendChild(b);
         });
 
-        startT();
+        startTimer();
     }
 
-    function startT() {
+    function startTimer() {
         clearInterval(state.timer);
-        const sec = { easy: 5, medium: 4, hard: 3 }[state.diff];
-        let ms = sec * 1000;
-        const fill = document.getElementById('t-fill');
-        
-        const step = 20;
+        state.timeLeft = state.maxTime * 100;
+        const fill = document.getElementById('timer-fill');
+        const text = document.getElementById('timer-text');
+
         state.timer = setInterval(() => {
-            ms -= step;
-            fill.style.width = `${(ms / (sec * 1000)) * 100}%`;
-            if (ms <= 0) answer(false);
-        }, step);
+            state.timeLeft -= 10;
+            let percent = (state.timeLeft / (state.maxTime * 100)) * 100;
+            fill.style.width = percent + '%';
+            text.innerText = (state.timeLeft / 100).toFixed(1) + ' сек';
+
+            if (state.timeLeft <= 0) {
+                answer(false);
+            }
+        }, 100);
     }
 
-    function answer(ok) {
+    function answer(isCorrect) {
         clearInterval(state.timer);
-        if (!ok) state.err++;
-        state.idx++;
-        renderQ();
+        if (!isCorrect) state.errors++;
+        state.index++;
+        renderQuestion();
     }
 
-    function getGrade() {
-        const total = state.qs.length;
-        const e = state.err;
-        const p = ((total - e) / total) * 100;
+    function finish() {
+        const grade = calcGrade();
+        showScreen('screen-res');
+        document.getElementById('res-grade').innerText = `Оценка: ${grade}`;
+        
+        const stats = document.getElementById('res-stats');
+        stats.innerHTML = `
+            <div class="stat-row"><span>Всего вопросов:</span> <b>${state.questions.length}</b></div>
+            <div class="stat-row"><span>Ошибок:</span> <b>${state.errors}</b></div>
+            <div class="stat-row"><span>Правильно:</span> <b>${state.questions.length - state.errors}</b></div>
+            <div class="stat-row"><span>Процент:</span> <b>${(((state.questions.length - state.errors)/state.questions.length)*100).toFixed(1)}%</b></div>
+        `;
+
+        saveResult(grade);
+    }
+
+    function calcGrade() {
+        const total = state.questions.length;
+        const err = state.errors;
+        const p = ((total - err) / total) * 100;
 
         if (state.type === 'all') {
-            // Система для общего теста
-            if (state.diff === 'easy') return e === 0 ? 5 : e === 1 ? 4 : e === 2 ? 3 : 2;
-            if (state.diff === 'medium') return e <= 1 ? 5 : e === 2 ? 4 : e === 3 ? 3 : 2;
-            if (state.diff === 'hard') return e <= 2 ? 5 : e === 3 ? 4 : e === 4 ? 3 : 2;
+            if (state.diff === 'easy') return err === 0 ? 5 : err === 1 ? 4 : err === 2 ? 3 : 2;
+            if (state.diff === 'medium') return err <= 1 ? 5 : err === 2 ? 4 : err === 3 ? 3 : 2;
+            if (state.diff === 'hard') return err <= 2 ? 5 : err === 3 ? 4 : err === 4 ? 3 : 2;
         } else {
-            // Система по процентам
             const bounds = {
                 easy: [100, 98, 96],
                 medium: [99, 97, 95],
@@ -484,28 +509,29 @@
             if (p >= bounds[2]) return 3;
             return 2;
         }
-        return 2;
     }
 
-    function finish() {
-        const g = getGrade();
-        showS('m-res');
-        document.getElementById('r-grade').innerText = `Оценка: ${g}`;
-        document.getElementById('r-info').innerText = `Верно: ${state.qs.length - state.err} из ${state.qs.length}`;
-        
-        let history = JSON.parse(localStorage.getItem('br_stats') || '[]');
-        history.push({ date: new Date().toLocaleDateString(), t: state.type, d: state.diff, g: g });
-        localStorage.setItem('br_stats', JSON.stringify(history));
+    function saveResult(g) {
+        let history = JSON.parse(localStorage.getItem('br_history') || '[]');
+        history.push({ d: new Date().toLocaleString(), t: state.type, g: g });
+        localStorage.setItem('br_history', JSON.stringify(history));
     }
 
-    function showStats() {
-        showS('m-stats');
-        const list = document.getElementById('st-list');
-        const history = JSON.parse(localStorage.getItem('br_stats') || '[]');
-        list.innerHTML = history.length ? '' : 'Нет записей';
-        history.reverse().forEach(s => {
-            list.innerHTML += `<div class="stat-card"><b>${s.g}</b> — ${s.t} (${s.d}) <br><small>${s.date}</small></div>`;
+    function showHistory() {
+        showScreen('screen-history');
+        const list = document.getElementById('history-list');
+        let history = JSON.parse(localStorage.getItem('br_history') || '[]');
+        list.innerHTML = history.length ? '' : '<p>Вы еще не проходили тесты</p>';
+        history.reverse().forEach(h => {
+            list.innerHTML += `<div class="stat-row"><span>${h.t}</span> <b>${h.g}</b></div><small>${h.d}</small><hr style="opacity:0.1">`;
         });
+    }
+
+    function backToMenu() { showScreen('screen-menu'); }
+
+    function showScreen(id) {
+        document.querySelectorAll('.glass-card > div').forEach(s => s.classList.add('hidden'));
+        document.getElementById(id).classList.remove('hidden');
     }
 </script>
 
